@@ -1,0 +1,179 @@
+apply plugin: 'com.android.application'
+
+// Manifest version information!
+def versionMajor = 0
+def versionMinor = 9
+def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "com.wander.life"
+        minSdkVersion 15
+        targetSdkVersion 25
+
+        renderscriptTargetApi 24
+        renderscriptSupportModeEnabled true
+
+        versionCode versionMajor * 100 + versionMinor * 10 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionBuild}"
+
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dangbei"]
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-fexceptions"
+            }
+        }
+
+
+        jackOptions {
+            enabled true
+        }
+//
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a'
+        }
+    }
+
+    signingConfigs {
+        debug {
+            // use release
+        }
+
+        release {
+            storeFile file("wander.keystore")
+            keyAlias "life.keystore"
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('gradle.properties').newDataInputStream())
+            storePassword = properties.getProperty("KEYSTORE_PASSWORD")
+            keyPassword = properties.getProperty("KEY_PASSWORD")
+
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+            zipAlignEnabled true
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    //多渠道打包，添加即可
+    //使用cmake 不能添加中文渠道？
+    productFlavors {
+        _yingyongbao {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "yingyongbao"]
+        }
+    }
+    //使用统一的方式不能避免首字母是数字的渠道，采用逐一配置
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+    }
+    //修改生成的apk名字
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def oldFile = output.outputFile
+            def newName = '';
+            if (variant.buildType.name.equals('release')) {
+                def releaseApkName = 'whisper' + '_V' + defaultConfig.versionName + variant.productFlavors[0].name + '.apk'
+                output.outputFile = new File(oldFile.parent, releaseApkName)
+            }
+            if (variant.buildType.name.equals('beta')) {
+                newName = oldFile.name.replace(".apk", "-v" + defaultConfig.versionName + "-build" + getDate() + ".apk")
+                output.outputFile = new File(oldFile.parent, newName)
+            }
+            if (variant.buildType.name.equals('debug')) {
+                def debugApkName = 'whisper' + '_V' + defaultConfig.versionName + variant.productFlavors[0].name + '_debug.apk'
+                output.outputFile = new File(oldFile.parent, debugApkName)
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+
+    sourceSets {
+        main {
+            jni.srcDirs = []
+        }
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    //jpg文件改为png后缀名的情况
+//    aaptOptions {
+//        cruncherEnabled = false
+//    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+//    splits {
+//
+//        // Configures screen ABI split settings
+//        abi {
+//
+//            // Enable ABI APK splits
+//            enable true
+//
+//            // By default all ABIs are included, so use reset() and include to specify that we only
+//            // want APKs for x86, armeabi-v7a, and mips
+//
+//            // Resets the list of ABIs that Gradle should create APKs for to none
+//            reset()
+//
+//            // Specifies a list of ABIs that Gradle should create APKs for
+//            include 'x86','armeabi-v7a','mips'
+//
+//            // Specify that we do not want to also generate a universal APK that includes all ABIs
+//            universalApk false       // 是否打通用包
+//        }
+//        abiFilters{
+//
+//        }
+//
+//    }
+
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:support-v4:25.1.0'
+    compile 'com.android.support:cardview-v7:25.1.0'
+    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:recyclerview-v7:25.1.0'
+    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.3'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.4'
+    testCompile 'junit:junit:4.12'
+    compile project(':FlycoTabLayout_Lib')
+}
