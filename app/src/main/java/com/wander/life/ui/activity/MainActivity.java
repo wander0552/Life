@@ -1,6 +1,5 @@
 package com.wander.life.ui.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
@@ -10,17 +9,17 @@ import com.flyco.tablayout.listener.DefaultTabEntity;
 import com.wander.base.RxUtils.rxbus.EventThread;
 import com.wander.base.RxUtils.rxbus.RxBus;
 import com.wander.base.RxUtils.rxbus.Subscribe;
-import com.wander.base.utils.ScreenUtils;
 import com.wander.life.R;
 import com.wander.life.presenter.MainPresenter;
 import com.wander.life.test.fragment.LocationFragment;
+import com.wander.life.ui.fragment.WorldFragment;
 import com.wander.life.ui.iviews.IMainView;
+import com.wander.life.ui.listeners.OnFragmentMainListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class MainActivity extends PresenterActivity<MainPresenter> implements IMainView {
+public class MainActivity extends PresenterActivity<MainPresenter> implements IMainView,OnFragmentMainListener {
 
     private CommonTabLayout mTabLayout;
     private ArrayList<Fragment> fragments;
@@ -49,7 +48,7 @@ public class MainActivity extends PresenterActivity<MainPresenter> implements IM
         fragmentList.add(new DefaultTabEntity("不二", R.mipmap.ic_tab_chat_selected, R.mipmap.ic_tab_chat_normal));
         fragments.add(new LocationFragment());
         fragmentList.add(new DefaultTabEntity("世界", R.mipmap.ic_tab_view_selected, R.mipmap.ic_tab_view_normal));
-        fragments.add(new LocationFragment());
+        fragments.add(new WorldFragment());
         fragmentList.add(new DefaultTabEntity("发现", R.mipmap.ic_tab_home_selected, R.mipmap.ic_tab_home_normal));
         fragments.add(new LocationFragment());
         fragmentList.add(new DefaultTabEntity("我的", R.mipmap.ic_tab_me_selected, R.mipmap.ic_tab_me_normal));
