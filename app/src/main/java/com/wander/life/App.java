@@ -29,7 +29,6 @@ import java.io.File;
 
 public class App extends MultiDexApplication {
     private static App appContext;
-    public static boolean RELEASE = false;
     private String TAG = "application";
     private double mAppCount;
 
@@ -62,7 +61,7 @@ public class App extends MultiDexApplication {
         // 设置日志级别
         WLog.init(AppContext.APP_NAME);
         initCrashHandler();
-        if (RELEASE) {
+        if (!BuildConfig.DEBUG) {
             WLog.trace(false);
             WLog.debug(false);
         } else {

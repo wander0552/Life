@@ -47,9 +47,9 @@ public class MainActivity extends PresenterActivity<MainPresenter> implements IM
         //不二 世界 发现 我的
         fragmentList.add(new DefaultTabEntity("不二", R.mipmap.ic_tab_chat_selected, R.mipmap.ic_tab_chat_normal));
         fragments.add(new LocationFragment());
-        fragmentList.add(new DefaultTabEntity("世界", R.mipmap.ic_tab_view_selected, R.mipmap.ic_tab_view_normal));
+        fragmentList.add(new DefaultTabEntity("发现", R.mipmap.ic_tab_view_selected, R.mipmap.ic_tab_view_normal));
         fragments.add(new WorldFragment());
-        fragmentList.add(new DefaultTabEntity("发现", R.mipmap.ic_tab_home_selected, R.mipmap.ic_tab_home_normal));
+        fragmentList.add(new DefaultTabEntity("动态", R.mipmap.ic_tab_home_selected, R.mipmap.ic_tab_home_normal));
         fragments.add(new LocationFragment());
         fragmentList.add(new DefaultTabEntity("我的", R.mipmap.ic_tab_me_selected, R.mipmap.ic_tab_me_normal));
         fragments.add(new LocationFragment());

@@ -33,9 +33,6 @@ public abstract class PresenterActivity<T extends IPresenter> extends BaseLayerA
 
     protected abstract T getPresenter();
 
-    /**
-     * view初始化之前调用
-     */
     protected abstract void initEventAndData();
 
 }

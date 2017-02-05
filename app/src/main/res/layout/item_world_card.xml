@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/world_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -19,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
+            android:layout_margin="5dp"
             android:textColor="@color/primary_text"
             android:textSize="30sp" />
 
@@ -27,8 +29,9 @@
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:layout_below="@id/world_card_title"
+            android:transitionName="@string/item_world_image"
             android:scaleType="centerCrop"
-            android:src="@mipmap/charing" />
+            tools:targetApi="lollipop" />
 
         <TextView
             android:id="@+id/world_card_des"
