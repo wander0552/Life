@@ -12,7 +12,7 @@ public class CacheManager {
     public static String readFile(File file) throws IOException {
         String res = null;
         try {
-            res = KwFileUtils.fileRead(file.getAbsolutePath(), "utf-8");
+            res = FileUtils.fileRead(file.getAbsolutePath(), "utf-8");
 
         } catch (OutOfMemoryError e) {
         }

@@ -28,7 +28,7 @@ import java.io.File;
 
 
 public class App extends MultiDexApplication {
-    private static App appContext;
+    private static App mAppContext;
     private String TAG = "application";
     private double mAppCount;
 
@@ -36,7 +36,7 @@ public class App extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
-        appContext = this;
+        mAppContext = this;
         init();
         initSDK();
 
@@ -82,7 +82,7 @@ public class App extends MultiDexApplication {
             @Override
             public void onActivityStarted(Activity activity) {
                 mAppCount++;
-                WLog.e("myconut", "onActivityStarted myconut: " + mAppCount);
+                WLog.d("myconut", "onActivityStarted myconut: " + mAppCount);
             }
 
             @Override
@@ -96,7 +96,8 @@ public class App extends MultiDexApplication {
             @Override
             public void onActivityStopped(Activity activity) {
                 mAppCount--;
-                WLog.e("myconut", "onStopped myconut: " + mAppCount);
+                AppContext.appShowing = mAppCount > 0;
+                WLog.d("myconut", "onStopped myconut: " + mAppCount);
             }
 
             @Override
@@ -203,13 +204,13 @@ public class App extends MultiDexApplication {
     }
 
     public static App getAppContext() {
-        return appContext;
+        return mAppContext;
     }
 
     public static void exitApp() {
         NetworkStateUtil.release(getAppContext());
-        if (appContext != null) {
-            MobclickAgent.onKillProcess(appContext);
+        if (mAppContext != null) {
+            MobclickAgent.onKillProcess(mAppContext);
         }
         android.os.Process.killProcess(android.os.Process.myPid());
     }

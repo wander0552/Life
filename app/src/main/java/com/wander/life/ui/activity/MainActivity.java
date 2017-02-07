@@ -34,6 +34,11 @@ public class MainActivity extends PresenterActivity<MainPresenter> implements IM
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void initView() {
         initTab();
 

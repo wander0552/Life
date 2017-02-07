@@ -55,16 +55,9 @@ public class WorldDetailActivity extends PresenterActivity<WorldDetailPresenter>
         Toolbar mToolbar = (Toolbar) findViewById(R.id.world_detail_bar);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("详情介绍");
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         AppBarLayout mBarLayout = (AppBarLayout) findViewById(R.id.world_detail_bar_layout);
-        mBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                WLog.e(TAG,"\t"+verticalOffset);
-
-            }
-        });
 
         findViewById(R.id.world_detail_add).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +87,6 @@ public class WorldDetailActivity extends PresenterActivity<WorldDetailPresenter>
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                WLog.e(TAG,"recycler\t"+dx+"\tdy"+dy);
             }
         });
     }

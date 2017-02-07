@@ -9,14 +9,43 @@
     tools:context="com.wander.life.ui.activity.WriteActivity"
     tools:showIn="@layout/activity_write">
 
-    <EditText
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:inputType="none"
-        android:background="@mipmap/charing"
-        android:gravity="center_horizontal"
-        android:padding="@dimen/fab_margin"
-        android:text="@string/notifyMsg"
-        android:id="@+id/write_edit"/>
+        android:layout_height="match_parent">
+
+
+        <EditText
+            android:id="@+id/write_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#d1ce92"
+            android:gravity="center_horizontal"
+            android:inputType="none"
+            android:padding="@dimen/fab_margin"
+            android:text="@string/notifyMsg" />
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/mark_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/mark_layout_height"
+        android:layout_alignParentBottom="true"
+        android:background="#f2f2f2"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/mark_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="加粗" />
+
+
+    </LinearLayout>
+
 
 </RelativeLayout>

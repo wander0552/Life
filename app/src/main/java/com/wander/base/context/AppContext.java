@@ -21,8 +21,6 @@ import com.wander.life.App;
 import com.wander.life.utils.Constants;
 import com.wander.life.utils.UrlUtils;
 
-import org.reactivestreams.Subscriber;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Locale;
@@ -46,19 +44,16 @@ public class AppContext {
     public static int SCREEN_HEIGHT;
     public static String mChannel = "";
     public static String mBrand = "";
-    public static boolean touchMode;
-
-    // 是否是debug版本
-    public static boolean IS_DEBUG;
 
     // 打包时间
     public static String PACK_TIME = "";
-    public static String INSTALL_SOURCE = "kwmusicTV_5.0.0.1.apk";
+    public static String INSTALL_SOURCE = "wander.apk";
 
     // 总内存(B为单位）
     public static long TOTAL_MEM;
     // 总内存(MB为单位）
     public static long TOTAL_MEM_MB;
+    public static boolean appShowing;
 
 
     public AppContext() {
@@ -119,14 +114,18 @@ public class AppContext {
                 WLog.i("AppContext", "USER: " + Build.USER);
                 WLog.i("AppContext", "TOTALMEM: " + TOTAL_MEM_MB);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    WLog.i(TAG, "CPU_API: " + Build.SUPPORTED_ABIS.toString());
+                    String s = "";
+                    for (String abi:Build.SUPPORTED_ABIS){
+                        s+=abi;
+                    }
+                    WLog.i(TAG, "CPU_API: " + s);
                 } else {
                     WLog.i(TAG, "CPU_API: " + Build.CPU_ABI);
                 }
 
                 mBrand = Build.BRAND;
 
-                loadAppUid();
+//                loadAppUid();
             }
 
             sInited = true;

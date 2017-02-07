@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class KwFileUtils {
+public class FileUtils {
 	private final static String TAG					= "FileUtils";
 
 	/**
