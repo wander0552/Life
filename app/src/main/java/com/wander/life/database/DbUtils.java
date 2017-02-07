@@ -60,7 +60,7 @@ public class DbUtils {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            WLog.d(TAG, "loadMusic:" + e.getMessage());
+            WLog.d(TAG, "loadLetter:" + e.getMessage());
         } finally {
             if (null != cursor && !cursor.isClosed()) {
                 cursor.close();

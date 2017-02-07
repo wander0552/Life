@@ -2,6 +2,7 @@ package com.wander.life.presenter;
 
 import android.content.Context;
 
+import com.wander.life.bean.Letter;
 import com.wander.life.ui.iviews.IWriteView;
 
 /**
@@ -9,7 +10,16 @@ import com.wander.life.ui.iviews.IWriteView;
  */
 
 public class WritePresenter extends BasePresenter<IWriteView> {
+    private Letter mLetter;
     public WritePresenter(Context context, IWriteView mView) {
         super(context, mView);
+    }
+
+    public Letter getmLetter() {
+        return mLetter;
+    }
+
+    public void setmLetter(Letter mLetter) {
+        this.mLetter = mLetter;
     }
 }

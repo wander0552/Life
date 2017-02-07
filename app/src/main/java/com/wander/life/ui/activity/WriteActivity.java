@@ -154,6 +154,9 @@ public class WriteActivity extends PresenterActivity<WritePresenter> implements 
 
     @Override
     protected void initEventAndData() {
+        if (getIntent()!= null){
+
+        }
 
     }
 

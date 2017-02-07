@@ -10,8 +10,6 @@ import android.view.View;
 /**
  * 工具类 完成对窗口和视图View的 宽度和高度的处理
  * 
- * @author 端晴
- * 
  */
 public class DensityUtils {
 
