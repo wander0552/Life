@@ -51,7 +51,7 @@ public class DbUtils {
         try {
             String where = "type = ?";
             String[] whereValue = {Long.toString(typeId)};
-            cursor = DataBaseHelper.getInstance().getWritableDatabase().query(DataBaseHelper.LETTER_TABLE, null, where, whereValue, null, null, "createtime asc ", pageNum * pageSize + "," + pageSize);
+            cursor = DataBaseHelper.getInstance().getWritableDatabase().query(DataBaseHelper.LETTER_TABLE, null, where, whereValue, null, null, "createtime desc ", pageNum * pageSize + "," + pageSize);
             while (null != cursor && cursor.moveToNext()) {
                 Letter m = new Letter();
                 if (m.getInfoFromDataBase(cursor)) {

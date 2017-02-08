@@ -5,7 +5,9 @@
     android:id="@+id/item_mail_all"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_marginTop="@dimen/cardview_default_margin"
+    android:layout_marginLeft="@dimen/cardview_default_margin"
+    android:layout_marginRight="@dimen/cardview_default_margin"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="vertical"
     app:cardCornerRadius="5dp"
@@ -14,13 +16,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp">
+        android:layout_margin="5dp">
 
         <TextView
             android:id="@+id/mail_sender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:text="@string/app_name"
             android:textColor="@color/primary_text"
             android:textSize="20sp" />
@@ -30,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/mail_sender"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="8dp"
             android:layout_toLeftOf="@+id/mail_stamp"
