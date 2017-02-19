@@ -32,12 +32,14 @@ public class Letter implements Serializable {
 
 
     private long createTime;
-    private String content;
+    private String content = "";
     private String title;
     private String toName;
     private String fromName;
     private String address;
+    private int stampId;
     private String stampPic;
+    private int stampValue;
     private int addressId;
     private int toUserId;
     private int fromUserId;

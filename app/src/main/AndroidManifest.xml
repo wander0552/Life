@@ -33,10 +33,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.EntryActivity"
+        <activity
+            android:name=".ui.activity.EntryActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,8 +47,7 @@
             android:name=".ui.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation|locale|screenSize"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="UMENG_APPKEY"
@@ -79,6 +78,35 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
+        <service
+            android:name=".mod.push.PushService"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter android:priority="80000">
+                <action android:name="com.wander.mod.push.PushService" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".mod.push.PushReStartReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.ANY_DATA_STATE" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+            </intent-filter>
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
+                <action android:name="android.intent.action.MEDIA_REMOVED" />
+                <action android:name="android.intent.action.MEDIA_CHECKING" />
+                <action android:name="android.intent.action.MEDIA_EJECT" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

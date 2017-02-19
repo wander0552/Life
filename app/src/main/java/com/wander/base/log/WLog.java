@@ -79,7 +79,7 @@ public final class WLog {
 
     public static void printStackTrace(Exception e) {
         if (sDebug && sLogger != null) {
-            sLogger.e("KuwoException", e.toString());
+            sLogger.e("Exception", e.toString());
         }
     }
 }

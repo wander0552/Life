@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005, Kuwo, Inc. All rights reserved.
+ * Copyright (c) 2005, Inc. All rights reserved.
  */
 package com.wander.base.context;
 

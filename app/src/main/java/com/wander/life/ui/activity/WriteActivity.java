@@ -1,5 +1,7 @@
 package com.wander.life.ui.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -7,14 +9,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.wander.base.log.WLog;
@@ -45,6 +50,8 @@ public class WriteActivity extends PresenterActivity<WritePresenter> implements 
     private MenuItem menuItem2;
     private SoftKeyboardHelper keyboardHelper;
     private View mark_layout;
+    private ScrollView mScrollView;
+    private boolean menuCreated;
 
     @Override
     protected int getLayoutId() {
@@ -59,12 +66,14 @@ public class WriteActivity extends PresenterActivity<WritePresenter> implements 
         initView();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("写信");
 
         mEditText = (EditText) findViewById(R.id.write_edit);
 
-        mEditText.append(Html.fromHtml(sHTML));
-        mEditText.append(Html.fromHtml(ss2));
-        mEditText.setCursorVisible(editing);
+        mEditText.append(Html.fromHtml(mPresenter.getLetter().getContent()));
+//        mEditText.append(Html.fromHtml(sHTML));
+//        mEditText.append(Html.fromHtml(ss2));
         mEditText.setOnTouchListener(this);
 
 
@@ -72,12 +81,6 @@ public class WriteActivity extends PresenterActivity<WritePresenter> implements 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Letter letter = new Letter();
-                letter.setContent(mEditText.getText().toString());
-                letter.setType(Letter.LETTER_TYPE_DRAFT);
-                DbUtils.saveLetter(letter);
-
-
                 Snackbar.make(view, "恢复显示", Snackbar.LENGTH_LONG)
                         .setAction("Action", new View.OnClickListener() {
                             @Override
@@ -93,17 +96,36 @@ public class WriteActivity extends PresenterActivity<WritePresenter> implements 
         });
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+    }
+
     private void initView() {
         mark_layout = findViewById(R.id.mark_layout);
+        mScrollView = (ScrollView) findViewById(R.id.edit_scroll);
 
         keyboardHelper = new SoftKeyboardHelper();
         keyboardHelper.observeSoftKeyboard(this, new SoftKeyboardHelper.OnSoftKeyboardChangeListener() {
             @Override
             public void onSoftKeyBoardChange(int softKeyboardHeight, boolean visible) {
-                mEditText.scrollBy(0, (int) (mark_layout.getHeight() + mEditText.getTextSize()));
+                if (!menuCreated){
+                    return;
+                }
+                changeEditing(visible);
+                if (visible) {
+                    mScrollView.scrollBy(0, (int) (mark_layout.getHeight() + mEditText.getTextSize()));
+                }
                 mark_layout.setVisibility(visible ? View.VISIBLE : View.GONE);
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideSoftKeyboard();
     }
 
     @Override
@@ -114,11 +136,13 @@ public class WriteActivity extends PresenterActivity<WritePresenter> implements 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        boolean onCreateOptionsMenu = super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.write_menu, menu);
         menuItem1 = menu.findItem(R.id.write_menu1);
         menuItem2 = menu.findItem(R.id.write_menu2);
         WLog.e(TAG, "menuCreate");
-        return super.onCreateOptionsMenu(menu);
+        menuCreated = true;
+        return onCreateOptionsMenu;
     }
 
     @Override
@@ -138,6 +162,10 @@ public class WriteActivity extends PresenterActivity<WritePresenter> implements 
                     ToastUtils.makeTextShort("share");
                 }
                 break;
+            case android.R.id.home:
+                hideSoftKeyboard();
+                finish();
+                break;
             default:
                 break;
         }
@@ -154,14 +182,71 @@ public class WriteActivity extends PresenterActivity<WritePresenter> implements 
 
     @Override
     protected void initEventAndData() {
-        if (getIntent()!= null){
-
+        Intent intent = getIntent();
+        if (intent != null) {
+            Letter mLetter = (Letter) intent.getSerializableExtra("letter");
+            if (mLetter != null) {
+                mPresenter.setLetter(mLetter);
+            }
         }
 
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (editing) {
+                changeEditing(false);
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    @Override
     public boolean onTouch(View v, MotionEvent event) {
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            default:
+                break;
+        }
         return false;
+    }
+
+    private void changeEditing(boolean b) {
+//        mEditText.setEnabled(b);
+        mEditText.setCursorVisible(b);
+        if (b) {
+            menuItem1.setIcon(android.R.drawable.ic_input_add);
+            menuItem2.setIcon(android.R.drawable.ic_menu_save);
+            mEditText.requestFocus();
+        } else {
+            menuItem1.setIcon(android.R.drawable.ic_delete);
+            menuItem2.setIcon(android.R.drawable.ic_menu_share);
+            mPresenter.saveLetter();
+        }
+        editing = b;
+
+    }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromInputMethod(mEditText.getWindowToken(), 0);
+    }
+
+    @Override
+    public String getContent() {
+        if (mEditText != null) {
+            return mEditText.getText().toString();
+        }
+        return "";
     }
 }

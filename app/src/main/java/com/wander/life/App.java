@@ -23,6 +23,7 @@ import com.wander.base.dir.DirsUtils;
 import com.wander.base.log.BaseLogger;
 import com.wander.base.log.WLog;
 import com.wander.base.utils.NetworkStateUtil;
+import com.wander.life.mod.push.PushManage;
 
 import java.io.File;
 
@@ -56,7 +57,9 @@ public class App extends MultiDexApplication {
         return res;
     }*/
     private void init() {
-        //  初始化数据库
+        //  初始化
+        PushManage pushManage = new PushManage();
+        pushManage.startPushService(this);
 
         // 设置日志级别
         WLog.init(AppContext.APP_NAME);

@@ -32,8 +32,8 @@ public final class DirsUtils {
     public static final int
             SD_ROOT = 0,
             EXT_ROOT = 1, // 外置SD卡
-            HOME = 2, // sdcard/KuwoMusic
-            CACHE = 4, // cn.kuwo.base.cache存储数据的位置
+            HOME = 2, // sdcard/Wander
+            CACHE = 4, // cache存储数据的位置
             LYRICS = 5, // 歌词目录，旧版资源也在
             DEFDOWNLOAD = 6,
             DEFEXDOWNLOAD = 7, //外置sd卡默认歌曲下载目录
@@ -86,7 +86,7 @@ public final class DirsUtils {
                 dirPath = HOME_PATH;
                 break;
             case CACHE:
-                dirPath = HOME_PATH + "data";
+                dirPath = HOME_PATH + "cache";
                 break;
             case LYRICS:
                 dirPath = HOME_PATH_FOR_HIDE + "lyrics";
@@ -107,7 +107,7 @@ public final class DirsUtils {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
                     dirPath = getDir(EXT_ROOT) + "Android/data/" + App.getAppContext().getPackageName();
                 } else {
-                    dirPath = getDir(EXT_ROOT) + "KuwoMusic/music";
+                    dirPath = getDir(EXT_ROOT) + "Wander/music";
                 }
                 break;
             case PIC_CACHE:
@@ -150,7 +150,7 @@ public final class DirsUtils {
     /**
      * SD卡 应用目录
      */
-    private static final String HOME_PATH = SD_ROOTPATH + "KuwoMusicTV" + File.separator;
+    private static final String HOME_PATH = SD_ROOTPATH + "Wander" + File.separator;
     private static final String HOME_PATH_FOR_HIDE = HOME_PATH + ".";
 
     public static String getFirstExterPath() {

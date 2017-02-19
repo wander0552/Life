@@ -1,7 +1,5 @@
 /*
  * Have a nice day.
- * @author YangSong
- * @mail song.yang@kuwo.cn
  */
 package com.wander.base.utils;
 

@@ -12,14 +12,15 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/edit_scroll"
+        android:background="#c9c685">
 
 
         <EditText
             android:id="@+id/write_edit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#d1ce92"
             android:gravity="center_horizontal"
             android:inputType="none"
             android:padding="@dimen/fab_margin"

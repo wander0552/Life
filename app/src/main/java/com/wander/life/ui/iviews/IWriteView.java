@@ -5,4 +5,5 @@ package com.wander.life.ui.iviews;
  */
 
 public interface IWriteView extends IView {
+    String getContent();
 }

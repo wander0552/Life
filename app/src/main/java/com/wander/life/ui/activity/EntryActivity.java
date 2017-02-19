@@ -1,5 +1,8 @@
 package com.wander.life.ui.activity;
 
+import android.app.Activity;
+import android.app.WallpaperManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -28,7 +31,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
-public class EntryActivity extends AppCompatActivity {
+public class EntryActivity extends Activity {
 
     private ImageView entry_bg;
     private boolean inited;
@@ -87,7 +90,7 @@ public class EntryActivity extends AppCompatActivity {
         }
     }
 
-    boolean firstFocus;
+    boolean firstFocus = true;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -95,6 +98,7 @@ public class EntryActivity extends AppCompatActivity {
         if (hasFocus) {
             if (firstFocus && !inited) {
                 goInitOnBack();
+                firstFocus = false;
             }
         }
 
