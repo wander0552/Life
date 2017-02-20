@@ -1,4 +1,4 @@
-package com.wander.life.utils;
+package com.wander.life.mod.net;
 
 import android.os.Build;
 import android.text.TextUtils;

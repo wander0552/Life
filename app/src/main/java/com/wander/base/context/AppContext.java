@@ -19,7 +19,7 @@ import com.wander.base.utils.PrefsUtils;
 import com.wander.base.utils.WDate;
 import com.wander.life.App;
 import com.wander.life.utils.Constants;
-import com.wander.life.utils.UrlUtils;
+import com.wander.life.mod.net.UrlUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
