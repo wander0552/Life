@@ -30,6 +30,6 @@ public class WritePresenter extends BasePresenter<IWriteView> {
         mLetter.setAddress("test");
         String content = mView.getContent();
         mLetter.setContent(content);
-        DbUtils.saveLetter(mLetter);
+        DbUtils.updateOrInstert(mLetter);
     }
 }

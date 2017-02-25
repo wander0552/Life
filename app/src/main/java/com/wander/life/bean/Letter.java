@@ -22,7 +22,7 @@ public class Letter implements Serializable {
     public static final int LETTER_TYPE_SEND_SMS = 4;
     public static final int LETTER_TYPE_SEND_EMAIL = 5;
 
-    private long id;
+    private long id = -1;
     /**
      * 服务器信件id
      */

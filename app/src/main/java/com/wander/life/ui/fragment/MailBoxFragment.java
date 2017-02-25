@@ -11,12 +11,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.wander.life.R;
 import com.wander.life.bean.Letter;
 import com.wander.life.presenter.MailBoxPresenter;
 import com.wander.life.ui.adapter.MailBoxAdapter;
 import com.wander.life.ui.iviews.IMailBoxView;
+import com.wander.life.utils.JumpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +42,13 @@ public class MailBoxFragment extends PresenterFragment<MailBoxPresenter> impleme
     }
 
     private void initView() {
-        setHasOptionsMenu(true);
-        Toolbar mToolbar = (Toolbar) mView.findViewById(R.id.mailbox_bar);
-        ((AppCompatActivity)mContext).setSupportActionBar(mToolbar);
-
+        ImageView icon = (ImageView) mView.findViewById(R.id.mail_box_icon);
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JumpUtils.goEdit(mContext);
+            }
+        });
 
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.mailbox_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -62,7 +67,6 @@ public class MailBoxFragment extends PresenterFragment<MailBoxPresenter> impleme
     }
 
 
-
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_mailbox;
@@ -73,14 +77,4 @@ public class MailBoxFragment extends PresenterFragment<MailBoxPresenter> impleme
         mAdapter.addData(letters);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.mailbox,menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
 }

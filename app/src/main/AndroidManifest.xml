@@ -81,7 +81,7 @@
         <service
             android:name=".mod.push.PushService"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter android:priority="80000">
                 <action android:name="com.wander.mod.push.PushService" />
             </intent-filter>
@@ -107,6 +107,8 @@
                 <action android:name="android.intent.action.MEDIA_EJECT" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".ui.activity.EditorActivity"></activity>
     </application>
 
 </manifest>

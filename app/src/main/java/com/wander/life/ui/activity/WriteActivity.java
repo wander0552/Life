@@ -187,6 +187,7 @@ public class WriteActivity extends PresenterActivity<WritePresenter> implements 
             Letter mLetter = (Letter) intent.getSerializableExtra("letter");
             if (mLetter != null) {
                 mPresenter.setLetter(mLetter);
+                WLog.e(TAG,mLetter.getContent());
             }
         }
 
@@ -245,8 +246,10 @@ public class WriteActivity extends PresenterActivity<WritePresenter> implements 
     @Override
     public String getContent() {
         if (mEditText != null) {
-            return mEditText.getText().toString();
+            String s = mEditText.getText().toString();
+            return s;
         }
+
         return "";
     }
 }

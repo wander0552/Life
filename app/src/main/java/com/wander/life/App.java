@@ -23,6 +23,7 @@ import com.wander.base.dir.DirsUtils;
 import com.wander.base.log.BaseLogger;
 import com.wander.base.log.WLog;
 import com.wander.base.utils.NetworkStateUtil;
+import com.wander.life.mod.net.OkGoUtils;
 import com.wander.life.mod.push.PushManage;
 
 import java.io.File;
@@ -125,6 +126,8 @@ public class App extends MultiDexApplication {
         MobclickAgent.enableEncrypt(true);//6.0.0版本及以后
 
         initImageLoad();
+
+        OkGoUtils.initOkGo();
     }
 
     private void initCrashHandler() {

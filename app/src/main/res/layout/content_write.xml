@@ -11,20 +11,23 @@
 
 
     <ScrollView
+        android:id="@+id/edit_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/edit_scroll"
-        android:background="#c9c685">
+        android:paddingBottom="50dp">
 
 
         <EditText
             android:id="@+id/write_edit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#c9c685"
             android:gravity="center_horizontal"
             android:inputType="none"
-            android:padding="@dimen/fab_margin"
-            android:text="@string/notifyMsg" />
+            android:lineSpacingExtra="@dimen/fab_margin"
+            android:lineSpacingMultiplier="1.3"
+            android:text="@string/notifyMsg"
+            android:textCursorDrawable="@drawable/cursor" />
 
     </ScrollView>
 

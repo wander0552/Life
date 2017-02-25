@@ -54,6 +54,7 @@ public class AppContext {
     // 总内存(MB为单位）
     public static long TOTAL_MEM_MB;
     public static boolean appShowing;
+    public static boolean debugMode = false;
 
 
     public AppContext() {

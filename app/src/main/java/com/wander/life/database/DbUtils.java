@@ -17,6 +17,49 @@ import java.util.List;
 public class DbUtils {
     static String TAG = "DbUtils";
 
+
+    /**
+     * 更新或插入邮件
+     *
+     * @param letter
+     * @return
+     */
+    public static boolean updateOrInstert(Letter letter) {
+        if (letter == null) {
+            return false;
+        }
+        try {
+            if (letter.getId() == -1) {
+                saveLetter(letter);
+            } else {
+                updateLetter(letter);
+            }
+        } catch (SQLException e) {
+            WLog.printStackTrace(e);
+        }
+        return false;
+
+    }
+
+    public static boolean updateLetter(Letter letter) {
+        if (letter == null || letter.getId() == -1) {
+            return false;
+        }
+        try {
+            SQLiteDatabase database = DataBaseHelper.getInstance().getWritableDatabase();
+            int update = database.update(DataBaseHelper.LETTER_TABLE, letter.getContentValues(), "id = ", new String[]{String.valueOf(letter.getId())});
+            if (update != 1) {
+                WLog.e(TAG, "update error");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            WLog.printStackTrace(e);
+        }
+        return false;
+
+    }
+
     public static boolean saveLetter(Letter letter) {
         if (letter == null) {
             return false;
@@ -68,8 +111,6 @@ public class DbUtils {
         }
         return list;
     }
-
-
 
 
 }
