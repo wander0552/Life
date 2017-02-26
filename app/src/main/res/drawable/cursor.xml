@@ -8,5 +8,5 @@
 
     <solid android:color="@color/light_color" />
     <padding
-        android:bottom="-20sp" />
+        android:bottom="-6sp" />
 </shape>

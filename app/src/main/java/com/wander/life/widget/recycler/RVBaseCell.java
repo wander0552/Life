@@ -1,5 +1,7 @@
 package com.wander.life.widget.recycler;
 
+import android.view.ViewGroup;
+
 /**
  * Created by zhouwei on 17/1/19.
  */

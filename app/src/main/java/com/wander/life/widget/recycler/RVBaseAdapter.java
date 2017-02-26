@@ -43,6 +43,7 @@ public   abstract class RVBaseAdapter<C extends RVBaseCell>  extends RecyclerVie
     @Override
     public void onBindViewHolder(RVBaseViewHolder holder, int position) {
         mData.get(position).onBindViewHolder(holder,position);
+        onViewHolderBound(holder, position);
     }
 
     @Override
