@@ -21,7 +21,6 @@ public class BaseLayerActivity extends BaseActivity {
     private FrameLayout mAboveContainer;// 用于引导图实现
     private FrameLayout mContentContainer;// 用于显示内容
     private FrameLayout mStateViewContainer;// 用于显示各种加载状态的内容
-    private RelativeLayout baseBg;
 
 
     @Override
@@ -31,7 +30,6 @@ public class BaseLayerActivity extends BaseActivity {
         mAboveContainer = (FrameLayout) findViewById(R.id.above_container);
         mContentContainer = (FrameLayout) findViewById(R.id.content_container);
         mStateViewContainer = (FrameLayout) findViewById(R.id.stateView_container);
-        baseBg = (RelativeLayout) findViewById(R.id.base_bg);
 
         FrameLayout titleContainer = (FrameLayout) findViewById(R.id.bar_container);
         if (isUseTitleView()) {
@@ -61,6 +59,7 @@ public class BaseLayerActivity extends BaseActivity {
         if (drawable == null) {
 //            baseBg.setBackgroundResource(R.mipmap.bg);
         } else {
+            RelativeLayout baseBg = (RelativeLayout) findViewById(R.id.base_bg);
             baseBg.setBackgroundDrawable(drawable);
         }
     }

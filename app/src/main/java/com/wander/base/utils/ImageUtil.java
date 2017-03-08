@@ -5,8 +5,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -18,7 +24,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 
 
 public class ImageUtil {
@@ -106,6 +111,42 @@ public class ImageUtil {
     }
 
     /**
+     * 画成圆角图片
+     * 内存泄漏了
+     */
+    public static Bitmap getRoundCornerImage(Bitmap bitmap, int roundPixels) {
+        /**创建一个和原始图片一样大小位图*/
+        Bitmap roundConcerImage = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        /**创建带有位图roundConcerImage的画布*/
+        Canvas canvas = new Canvas(roundConcerImage);
+        /**创建画笔  */
+        Paint paint = new Paint();
+        /**创建一个和原始图片一样大小的矩形*/
+        Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        RectF rectF = new RectF(rect);
+        /**去锯齿*/
+        paint.setAntiAlias(true);
+//        /**画一个和原始图片一样大小的圆角矩形*/
+//        canvas.drawRoundRect(rectF, roundPixels, roundPixels, paint);
+//        /**设置相交模式  */
+//        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+//        /**把图片画到矩形去  */
+//        canvas.drawBitmap(bitmap, rect, rectF, paint);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+
+////////////////////////////////////////////////////////////////////////////////////
+        /**引时圆角区域为透明，给其填充白色  */
+        paint.setColor(Color.WHITE);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_ATOP));
+        canvas.drawRect(rectF, paint);
+///////////////////////////////////////////////////////////////////////////////////
+        BitmapTools.recycleBitmap(bitmap);
+
+        return roundConcerImage;
+    }
+
+    /**
      * 从以前ImageManager中移出来，搞不懂为啥放个动画缩放在里面
      *
      * @param view
@@ -121,6 +162,7 @@ public class ImageUtil {
 
     /**
      * get 一个 根据path返回的图片。默认不缩放
+     *
      * @param path
      * @return
      */
@@ -131,6 +173,7 @@ public class ImageUtil {
 
     /**
      * get 一个 根据path，和传递的宽高缩放的图片
+     *
      * @param path
      * @param width
      * @param height

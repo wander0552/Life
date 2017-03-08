@@ -7,6 +7,7 @@ import android.view.ViewGroup;
  */
 
 public  abstract class RVBaseCell<T> implements Cell {
+    protected String TAG = "RVBaseCell";
 
     public RVBaseCell(T t){
         mData = t;

@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
 
+import com.wander.base.log.WLog;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +51,7 @@ public   abstract class RVBaseAdapter<C extends RVBaseCell>  extends RecyclerVie
     @Override
     public void onViewDetachedFromWindow(RVBaseViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        Log.e(TAG,"onViewDetachedFromWindow invoke...");
+        WLog.e(TAG,"onViewDetachedFromWindow invoke...");
         //释放资源
         int position = holder.getAdapterPosition();
         //越界检查
@@ -125,7 +127,7 @@ public   abstract class RVBaseAdapter<C extends RVBaseCell>  extends RecyclerVie
         if(cells == null || cells.size() == 0){
             return;
         }
-        Log.e(TAG,"addAll cell size:"+cells.size());
+        WLog.e(TAG,"addAll cell size:"+cells.size());
         mData.addAll(cells);
         notifyItemRangeChanged(mData.size()-cells.size(),mData.size());
     }

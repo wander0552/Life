@@ -36,7 +36,7 @@ public class PushService extends Service {
             public void run() {
                 WLog.e(Tag,"running push");
             }
-        }, 1000,60000);
+        }, 1000,600000);
 
         return Service.START_STICKY;
     }

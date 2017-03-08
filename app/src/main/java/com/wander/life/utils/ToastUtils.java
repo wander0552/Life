@@ -3,6 +3,7 @@ package com.wander.life.utils;
 import android.view.View;
 import android.widget.Toast;
 
+import com.wander.base.log.WLog;
 import com.wander.life.App;
 
 
@@ -35,6 +36,7 @@ public class ToastUtils {
         if (content == null) {
             return;
         }
+        WLog.e(TAG,content.toString());
         if (null == toast) {
             toast = Toast.makeText(App.getAppContext(), "", Toast.LENGTH_SHORT);
         }
@@ -51,6 +53,7 @@ public class ToastUtils {
         if (content == null) {
             return;
         }
+        WLog.e(TAG,content.toString());
         if (null == toast) {
             toast = Toast.makeText(App.getAppContext(), "", Toast.LENGTH_LONG);
         }

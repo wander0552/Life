@@ -34,7 +34,7 @@ public final class DirsUtils {
             EXT_ROOT = 1, // 外置SD卡
             HOME = 2, // sdcard/Wander
             CACHE = 4, // cache存储数据的位置
-            LYRICS = 5, // 歌词目录，旧版资源也在
+            PICS = 5,
             DEFDOWNLOAD = 6,
             DEFEXDOWNLOAD = 7, //外置sd卡默认歌曲下载目录
             CRASH = 8, // 崩溃堆栈文件
@@ -88,8 +88,8 @@ public final class DirsUtils {
             case CACHE:
                 dirPath = HOME_PATH + "cache";
                 break;
-            case LYRICS:
-                dirPath = HOME_PATH_FOR_HIDE + "lyrics";
+            case PICS:
+                dirPath = HOME_PATH + "pics";
                 break;
             case DEFDOWNLOAD:
                 dirPath = HOME_PATH + "music";

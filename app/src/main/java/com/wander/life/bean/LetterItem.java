@@ -1,5 +1,7 @@
 package com.wander.life.bean;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by wander on 2017/2/23.
  */
@@ -14,4 +16,32 @@ public class LetterItem {
     public final static int SOUND_TYPE = 6;
 
 
+
+    private boolean canEdit = true;
+    private String imageFile;
+    private String detail;
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public String getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(String imageFile) {
+        this.imageFile = imageFile;
+    }
+
+    public boolean isCanEdit() {
+        return canEdit;
+    }
+
+    public void setCanEdit(boolean canEdit) {
+        this.canEdit = canEdit;
+    }
 }
