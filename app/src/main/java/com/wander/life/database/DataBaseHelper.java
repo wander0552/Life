@@ -51,8 +51,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             "[id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
             "[lid] TEXT NOT NULL, " +
             "[type] INTEGER NOT NULL, " +
+            "[post_type] INTEGER, " +
             "[content] TEXT, " +
             "[title] TEXT, " +
+            "[theme] INTEGER, " +
+            "[stamp_id] INTEGER, " +
+            "[stamp_pic] TEXT, " +
+            "[stamp_value] INTEGER, " +
             "[toname] TEXT, " +
             "[fromname] TEXT, " +
             "[address] TEXT, " +
@@ -64,7 +69,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             "[send_time] TEXT, " +
             "[receive_time] TEXT, " +
             "[hasread] INTEGER NOT NULL DEFAULT (1)," +
-            "[createtime] TEXT)";
+            "[first_img] TEXT, " +
+            "[first_record] TEXT, " +
+            "[encrypt] INTEGER, " +
+            "[dirty] INTEGER, " +
+            "[reserved1] TEXT, " +
+            "[reserved2] TEXT, " +
+            "[reserved3] TEXT, " +
+            "[createtime] TEXT)"
+            ;
 
     //列表里的歌曲表
     public static final String MUSIC_TABLE = "music";

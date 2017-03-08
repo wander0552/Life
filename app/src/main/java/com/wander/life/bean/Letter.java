@@ -19,7 +19,8 @@ public class Letter implements Serializable {
     public static final int LETTER_TYPE_DRAFT = 1;
     public static final int LETTER_TYPE_SEND = 2;
     public static final int LETTER_TYPE_RECEIVE = 3;
-    public static final int LETTER_TYPE_SEND_SMS = 4;
+    //正在发送中,显示剩余时间
+    public static final int LETTER_TYPE_SEND_ON_LINE = 4;
     public static final int LETTER_TYPE_SEND_EMAIL = 5;
 
     private long id = -1;
@@ -27,22 +28,36 @@ public class Letter implements Serializable {
      * 服务器信件id
      */
     private String lId;
+
+    //信件类型，草稿，收信，寄信
     private int type;
     private int uId;
+    //加急，节日信
+    private int post_type;
 
 
     private long createTime;
+    /**
+     * 解析成对应的item
+     */
     private String content = "";
     private String title;
-    private String toName;
-    private String fromName;
-    private String address;
+//  书信主题种类
+    private int theme = -1;
+
     private int stampId;
     private String stampPic;
     private int stampValue;
+    /**
+     * 投递的邮箱
+     */
     private int addressId;
     private int toUserId;
     private int fromUserId;
+
+    private String toName;
+    private String fromName;
+    private String address;
     /**
      * 添加图片描述  上传图片加上letter id
      */
@@ -57,6 +72,17 @@ public class Letter implements Serializable {
     private long receiveTime;
     private boolean hasRead;
 
+    private String first_img;
+    private String first_record;
+//    用户加密,输入用户密码ok
+    private int encrypt;
+    private int dirty;
+    private String reserved1;
+    private String reserved2;
+    private String reserved3;
+
+
+
     public boolean getInfoFromDataBase(Cursor cursor) {
         if (cursor == null) {
             return false;
@@ -65,8 +91,14 @@ public class Letter implements Serializable {
             id = cursor.getInt(cursor.getColumnIndex("id"));
             lId = cursor.getString(cursor.getColumnIndex("lid"));
             type = cursor.getInt(cursor.getColumnIndex("type"));
+            post_type = cursor.getInt(cursor.getColumnIndex("post_type"));
             content = cursor.getString(cursor.getColumnIndex("content"));
             title = cursor.getString(cursor.getColumnIndex("title"));
+            theme = cursor.getInt(cursor.getColumnIndex("theme"));
+            stampId = cursor.getInt(cursor.getColumnIndex("stamp_id"));
+            stampPic = cursor.getString(cursor.getColumnIndex("stamp_pic"));
+            stampValue = cursor.getInt(cursor.getColumnIndex("stamp_value"));
+
             toName = cursor.getString(cursor.getColumnIndex("toname"));
             address = cursor.getString(cursor.getColumnIndex("address"));
             addressId = cursor.getInt(cursor.getColumnIndex("address_id"));
@@ -79,6 +111,14 @@ public class Letter implements Serializable {
             receiveTime = Long.parseLong(cursor.getString(cursor.getColumnIndex("receive_time")));
             createTime = Long.parseLong(cursor.getString(cursor.getColumnIndex("createtime")));
             hasRead = cursor.getInt(cursor.getColumnIndex("hasread")) == 0;
+
+            first_img= cursor.getString(cursor.getColumnIndex("first_img"));
+            first_record= cursor.getString(cursor.getColumnIndex("first_record"));
+            encrypt = cursor.getInt(cursor.getColumnIndex("encrypt"));
+            dirty = cursor.getInt(cursor.getColumnIndex("dirty"));
+            reserved1= cursor.getString(cursor.getColumnIndex("reserved1"));
+            reserved2= cursor.getString(cursor.getColumnIndex("reserved2"));
+            reserved3= cursor.getString(cursor.getColumnIndex("reserved3"));
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,8 +132,13 @@ public class Letter implements Serializable {
         cv.put("type", type);
 
         cv.put("lid", StringUtils.getNotNullString(lId));
+        cv.put("post_type",post_type);
         cv.put("content", content);
         cv.put("title", title);
+        cv.put("theme",theme);
+        cv.put("stamp_id",stampId);
+        cv.put("stamp_pic",stampPic);
+        cv.put("stamp_value",stampValue);
         cv.put("toname", toName);
         cv.put("fromname", fromName);
         cv.put("address",address);
@@ -107,6 +152,14 @@ public class Letter implements Serializable {
         cv.put("receive_time", receiveTime);
         cv.put("hasread", hasRead ? 0 : 1);
         cv.put("createtime", System.currentTimeMillis());
+
+        cv.put("first_img",first_img);
+        cv.put("first_record",first_record);
+        cv.put("encrypt",encrypt);
+        cv.put("dirty",dirty);
+        cv.put("reserved1",reserved1);
+        cv.put("reserved2",reserved2);
+        cv.put("reserved3",reserved3);
         return cv;
     }
 

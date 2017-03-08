@@ -16,10 +16,21 @@ public class LetterItem {
     public final static int SOUND_TYPE = 6;
 
 
+//    {"state":3,"height":1052,"width":780,"name":"img_20170226_151142_356.jpg"}
+
 
     private boolean canEdit = true;
     private String imageFile;
     private String detail;
+    private boolean fileUpload = false;
+    private int width;
+    private int height;
+
+    /**
+     * 文字处理信息
+     */
+    private String rtf;
+    private String comment;
 
     public String getDetail() {
         return detail;
