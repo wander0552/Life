@@ -85,7 +85,10 @@ public class EditorActivity extends PresenterActivity<EditPresenter> implements 
 
     @Override
     protected EditPresenter getPresenter() {
-        return null;
+        if (mPresenter == null) {
+            mPresenter = new EditPresenter(this, this);
+        }
+        return mPresenter;
     }
 
     @Override
@@ -97,10 +100,8 @@ public class EditorActivity extends PresenterActivity<EditPresenter> implements 
         mRecyclerView = (EditRecyclerView) findViewById(R.id.editor_recycle);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new EditAdapter();
-        ArrayList<EditBaseCell> mData = new ArrayList<>();
-        mData.add(new EditCell(new LetterItem()));
-        mAdapter.setData(mData);
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.add(new EditCell(mPresenter.createEditItem()));
     }
 
 
@@ -117,89 +118,19 @@ public class EditorActivity extends PresenterActivity<EditPresenter> implements 
                 mAdapter.add(new ImageCell(new LetterItem()));
                 break;
             case R.id.mark_bold:
+                mPresenter.saveLetter();
                 break;
             case R.id.mark_bold2:
                 EditorManage editorManage = new EditorManage();
-                editorManage.screenShot(mAdapter.getData(),mRecyclerView);
+                editorManage.screenShot(mAdapter.getData(), mRecyclerView);
 //                scrollShot();
+                break;
+            case R.id.mark_bold3:
+                "a".charAt(2);
                 break;
             default:
                 break;
         }
-
-    }
-
-    private void scrollShot() {
-        Paint paint = new Paint();
-        List<Bitmap> bitmaps = new ArrayList<>();
-        List<EditBaseCell> data = mAdapter.getData();
-        int count = 0;
-        for (EditBaseCell cell : data) {
-            count += cell.getHeight(mRecyclerView);
-        }
-
-        WLog.e(TAG, "count " + count);
-
-//        mRecyclerView.scrollTo(0,0);
-        Bitmap bigBitmap = Bitmap.createBitmap(mRecyclerView.getMeasuredWidth(), count, Bitmap.Config.RGB_565);
-        Canvas bigCanvas = new Canvas(bigBitmap);
-        Drawable lBackground = mRecyclerView.getBackground();
-        if (lBackground instanceof ColorDrawable) {
-            ColorDrawable lColorDrawable = (ColorDrawable) lBackground;
-            int lColor = lColorDrawable.getColor();
-            bigCanvas.drawColor(lColor);
-        }
-
-
-        int measuredHeight = mRecyclerView.getMeasuredHeight();
-        WLog.e(TAG, "measureHeight:" + measuredHeight);
-
-        int scrollPosition = 0;
-        while (scrollPosition <= count - measuredHeight) {
-            boolean canScrollVertically = mRecyclerView.canScrollVertically(1);
-            WLog.e(TAG, "canScrollVertically" + canScrollVertically);
-
-            WLog.e(TAG, "scrollPosition" + scrollPosition);
-            mRecyclerView.setDrawingCacheEnabled(true);
-            mRecyclerView.buildDrawingCache();
-            Bitmap bitmap = mRecyclerView.getDrawingCache();
-//            mRecyclerView.setDrawingCacheEnabled(false);
-            bigCanvas.drawBitmap(bitmap, 0, scrollPosition, paint);
-            mRecyclerView.scrollBy(0, measuredHeight);
-            scrollPosition += measuredHeight;
-            bitmaps.add(bitmap);
-        }
-        mRecyclerView.scrollBy(0, count - measuredHeight);
-        int top = measuredHeight - (count - scrollPosition);
-
-        WLog.e(TAG, "last" + top);
-        if (top > 0) {
-            mRecyclerView.setDrawingCacheEnabled(true);
-            mRecyclerView.buildDrawingCache();
-            Bitmap bitmap = mRecyclerView.getDrawingCache();
-            //          mRecyclerView.setDrawingCacheEnabled(false);
-
-            bigCanvas.drawBitmap(bitmap, new Rect(0, top, bitmap.getWidth(), bitmap.getHeight()),
-                    new Rect(0, scrollPosition, bigBitmap.getWidth(), bigBitmap.getHeight()), paint);
-            bitmaps.add(bitmap);
-        }
-
-        bitmaps.add(bigBitmap);
-
-        Observable.create(new ObservableOnSubscribe<Boolean>() {
-            @Override
-            public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
-                ImageUtil.saveBitmap(DirsUtils.getDir(DirsUtils.PICS) + "screenShot.jpeg", bigBitmap);
-                e.onNext(true);
-            }
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean aBoolean) throws Exception {
-
-                ToastUtils.makeTextShort("screen shot ok");
-            }
-        });
-
 
     }
 
@@ -239,6 +170,5 @@ public class EditorActivity extends PresenterActivity<EditPresenter> implements 
         mAdapter.add(new ImageCell(letterItem));
 
     }
-
 
 }

@@ -19,6 +19,7 @@ public class LetterItem {
 //    {"state":3,"height":1052,"width":780,"name":"img_20170226_151142_356.jpg"}
 
 
+    private int type;
     private boolean canEdit = true;
     private String imageFile;
     private String detail;

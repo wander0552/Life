@@ -5,4 +5,5 @@ package com.wander.life.ui.iviews;
  */
 
 public interface IEditView extends IView {
+
 }
