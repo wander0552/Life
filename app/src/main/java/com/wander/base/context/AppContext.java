@@ -1,6 +1,8 @@
 package com.wander.base.context;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.bluetooth.le.AdvertiseSettings;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -8,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.provider.CalendarContract;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.Display;
@@ -36,7 +39,7 @@ public class AppContext {
     private static final String TAG = "AppContext";
     private static final String DEVICE_ID_FILENAME = ".id";
     private static boolean sInited = false;
-    public static String APP_NAME = "kwmusicTV";
+    public static String APP_NAME = "life";
     public static String DEVICE_ID = "000000";
     public static int VERSION_CODE;
     public static String VERSION_NAME = "1.0.0.1";
@@ -81,28 +84,34 @@ public class AppContext {
 
                 if (!TextUtils.isEmpty(mChannel)) {
                     INSTALL_SOURCE = APP_NAME + "_" + VERSION_CODE + "_" + mChannel + ".apk";
-                }else{
+                } else {
                     INSTALL_SOURCE = APP_NAME + "_" + VERSION_CODE + ".apk";
                 }
 
                 TOTAL_MEM = getTotalMemory();
-                TOTAL_MEM_MB =  TOTAL_MEM /1024 / 1024;
+                TOTAL_MEM_MB = TOTAL_MEM / 1024 / 1024;
 
-                String e = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
-                if (e == null) {
+                @SuppressLint("HardwareIds") String deviceID = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                if (deviceID == null) {
                     WifiManager pi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
                     WifiInfo wm = pi.getConnectionInfo();
-                    e = wm.getMacAddress();
+                    deviceID = wm.getMacAddress();
+                    if (deviceID != null && deviceID.contains(":")) {
+                        deviceID = deviceID.replace(":", "");
+                    }
+                    if (deviceID != null && deviceID.contains(".")) {
+                        deviceID = deviceID.replace(".", "");
+                    }
                 }
-                if (e == null) {
-                    e = "000000";
+                if (deviceID == null) {
+                    deviceID = "000000";
                 }
-                DEVICE_ID = e;
+                DEVICE_ID = deviceID;
                 WLog.i("AppContext", "DEVICE_ID:" + DEVICE_ID);
             } catch (Exception var5) {
                 WLog.printStackTrace(var5);
                 return false;
-            }finally {
+            } finally {
 
                 WLog.i("AppContext", "MODEL: " + Build.MODEL);
                 WLog.i("AppContext", "BOARD: " + Build.BOARD);
@@ -116,8 +125,8 @@ public class AppContext {
                 WLog.i("AppContext", "TOTALMEM: " + TOTAL_MEM_MB);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     String s = "";
-                    for (String abi:Build.SUPPORTED_ABIS){
-                        s+=abi;
+                    for (String abi : Build.SUPPORTED_ABIS) {
+                        s += abi;
                     }
                     WLog.i(TAG, "CPU_API: " + s);
                 } else {
@@ -161,6 +170,7 @@ public class AppContext {
 
     /**
      * 获取当前进程名
+     *
      * @return
      */
     public static String getCurProcessName() {
@@ -178,7 +188,7 @@ public class AppContext {
         return "x86".equalsIgnoreCase(Build.CPU_ABI);
     }
 
-    public static String getAppUid(){
+    public static String getAppUid() {
         String uid = PrefsUtils.loadPrefString(App.getAppContext(), Constants.PREFERENCE_UID_INTERNAL, Constants.DEF_ERROR_UID);
         if (TextUtils.isEmpty(uid) || Constants.DEF_ERROR_UID.equals(uid)) {//get uid from network
             loadAppUid();
@@ -187,7 +197,7 @@ public class AppContext {
         return uid;
     }
 
-    private static void loadAppUid(){
+    private static void loadAppUid() {
         long lastTime = PrefsUtils.loadPrefLong(App.getAppContext(),
                 Constants.PREFERENCE_UID_LAST_INTERNAL, 0L);
         if (Math.abs(System.currentTimeMillis() - lastTime) < WDate.T_MS_DAY) {
@@ -198,7 +208,7 @@ public class AppContext {
             @Override
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
                 String uidurl = UrlUtils.getUidUrl(null);
-                if(!TextUtils.isEmpty(uidurl)){
+                if (!TextUtils.isEmpty(uidurl)) {
                     String result = HttpClient.syncGetString(uidurl);
                     if (!TextUtils.isEmpty(result)) {
                         int index = result.toUpperCase().indexOf("ID=");
@@ -229,32 +239,33 @@ public class AppContext {
                     localFileReader, 1024);
             try {
                 String firstLine = localBufferedReader.readLine();
-                if(firstLine == null) return initial_memory;
+                if (firstLine == null) return initial_memory;
                 arrayOfString = firstLine.split("\\s+");
-                initial_memory = (long)(Integer.valueOf(arrayOfString[1]).intValue()) * 1024;
+                initial_memory = (long) (Integer.valueOf(arrayOfString[1]).intValue()) * 1024;
             } finally {
                 localBufferedReader.close();
             }
-        } catch (Throwable e) {}
+        } catch (Throwable e) {
+        }
         return initial_memory;
     }
 
-    public static long getAvailMemory(Context context){
+    public static long getAvailMemory(Context context) {
         try {
             // 获取android当前可用内存大小
             ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-            if(getAvailMemoryInfo(context, mi)) {
+            if (getAvailMemoryInfo(context, mi)) {
                 return mi.availMem / (1024 * 1024);//MB单位
-            }else{
+            } else {
                 return 0;
             }
         } catch (Exception e) {
 
         }
-        return  0;
+        return 0;
     }
 
-    public static boolean getAvailMemoryInfo(Context context, ActivityManager.MemoryInfo memoryInfo){
+    public static boolean getAvailMemoryInfo(Context context, ActivityManager.MemoryInfo memoryInfo) {
         try {
             ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             am.getMemoryInfo(memoryInfo);

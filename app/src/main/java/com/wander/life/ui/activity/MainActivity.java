@@ -1,6 +1,7 @@
 package com.wander.life.ui.activity;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.widget.FrameLayout;
 
@@ -71,6 +72,15 @@ public class MainActivity extends PresenterActivity<MainPresenter> implements IM
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 
     @Override
     protected int getLayoutId() {
