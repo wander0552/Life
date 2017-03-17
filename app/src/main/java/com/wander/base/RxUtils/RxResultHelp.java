@@ -1,7 +1,6 @@
 package com.wander.base.RxUtils;
 
 
-import org.reactivestreams.Subscriber;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -9,7 +8,6 @@ import io.reactivex.ObservableOnSubscribe;
 
 /**
  * Created by wander on 2016/6/15.
- * email 805677461@qq.com
  */
 public class RxResultHelp {
     /**
