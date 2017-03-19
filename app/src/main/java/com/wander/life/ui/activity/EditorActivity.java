@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -161,6 +162,7 @@ public class EditorActivity extends PresenterActivity<EditPresenter> implements 
             showImage(imagePath);
             c.close();
         }
+
     }
 
     private void showImage(String imagePath) {

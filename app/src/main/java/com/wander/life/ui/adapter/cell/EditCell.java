@@ -2,6 +2,8 @@ package com.wander.life.ui.adapter.cell;
 
 import android.graphics.Bitmap;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -66,14 +68,21 @@ public class EditCell extends EditBaseCell {
                 mHolder.mEditText.setText(detail);
                 mHolder.mEditText.append("\n");
             }
+            Spannable spannable = new SpannableStringBuilder();
+            mHolder.mEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+
+                    if (hasFocus){
+                        mHolder.mEditText.moveCursorToVisibleOffset();
+                    }
+                }
+            });
             ((EditViewHolder) holder).mEditText.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     WLog.e("keycode", "\t" + keyCode);
                     switch (keyCode) {
-                        case EditorInfo.IME_ACTION_PREVIOUS:
-                            ToastUtils.makeTextShort("del");
-                            break;
                         case EditorInfo.IME_ACTION_DONE:
                             ToastUtils.makeTextShort("done");
                             break;
