@@ -145,3 +145,9 @@ public static final int *;
     public *;
 }
 
+#rxbus
+-keepclassmembers class ** {
+    @com.wander.base.RxUtils.rxbus.Subscribe <methods>;
+}
+-keep enum com.wander.base.RxUtils.rxbus.EventThread { *; }
+

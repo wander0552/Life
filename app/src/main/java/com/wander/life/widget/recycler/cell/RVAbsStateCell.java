@@ -47,6 +47,9 @@ public abstract class RVAbsStateCell extends RVBaseCell<Object> {
         }
         if(mView!=null){
             LinearLayout container = (LinearLayout) view.findViewById(R.id.rv_cell_state_root_layout);
+            if (null != mView.getParent()) {
+                ((ViewGroup) mView.getParent()).removeView(mView);
+            }
             container.removeAllViews();
             container.addView(mView);
         }

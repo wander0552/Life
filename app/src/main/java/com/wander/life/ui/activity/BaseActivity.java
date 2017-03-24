@@ -68,7 +68,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    private void checkPermissions(String... permissions) {
+    public void checkPermissions(String... permissions) {
         List<String> needRequestPermissionList = findDeniedPermissions(permissions);
         if (null != needRequestPermissionList && needRequestPermissionList.size() > 0) {
             ActivityCompat.requestPermissions(this,
@@ -76,6 +76,14 @@ public class BaseActivity extends AppCompatActivity {
                             new String[needRequestPermissionList.size()]),
                     PERMISSON_REQUESTCODE);
         }
+    }
+
+    /**
+     * onResume() 之前调用
+     * @param needPermissions
+     */
+    public void setNeedPermissions(String[] needPermissions) {
+        this.needPermissions = needPermissions;
     }
 
     /**
@@ -103,7 +111,7 @@ public class BaseActivity extends AppCompatActivity {
      * @return
      * @since 2.5.0
      */
-    private boolean verifyPermissions(int[] grantResults) {
+    public boolean verifyPermissions(int[] grantResults) {
         for (int result : grantResults) {
             if (result != PackageManager.PERMISSION_GRANTED) {
                 return false;
@@ -112,6 +120,7 @@ public class BaseActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] paramArrayOfInt) {
@@ -119,8 +128,14 @@ public class BaseActivity extends AppCompatActivity {
             if (!verifyPermissions(paramArrayOfInt)) {
                 showMissingPermissionDialog();
                 isNeedCheck = false;
+            }else {
+                onGrantedPermission();
             }
         }
+    }
+
+    private void onGrantedPermission() {
+
     }
 
     /**

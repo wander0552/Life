@@ -11,6 +11,8 @@ android {
         applicationId "com.wander.life"
         minSdkVersion 15
         targetSdkVersion 25
+        // Enabling multidex support.
+        multiDexEnabled true
 
         renderscriptTargetApi 24
         renderscriptSupportModeEnabled true
@@ -48,6 +50,7 @@ android {
             properties.load(project.rootProject.file('gradle.properties').newDataInputStream())
             storePassword = properties.getProperty("KEYSTORE_PASSWORD")
             keyPassword = properties.getProperty("KEY_PASSWORD")
+            v2SigningEnabled false
 
         }
     }
