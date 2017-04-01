@@ -9,10 +9,22 @@ import android.view.ViewGroup;
 public  abstract class RVBaseCell<T> implements Cell {
     protected String TAG = "RVBaseCell";
 
+
+    public RVBaseCell() {
+    }
+
     public RVBaseCell(T t){
         mData = t;
     }
     public T mData;
+
+    public void setData(T mData) {
+        this.mData = mData;
+    }
+
+    public T getData() {
+        return mData;
+    }
 
     @Override
     public void releaseResource() {

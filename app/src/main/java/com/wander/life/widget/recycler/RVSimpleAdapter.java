@@ -22,6 +22,8 @@ public class RVSimpleAdapter extends RVBaseAdapter {
     public static final int EMPTY_TYPE = Integer.MAX_VALUE - 2;
     public static final int LOADING_TYPE = Integer.MAX_VALUE - 3;
     public static final int LOAD_MORE_TYPE = Integer.MAX_VALUE - 4;
+    public static final int TEXT_TYPE = Integer.MAX_VALUE - 5;
+    public static final int LINE_TYPE = Integer.MAX_VALUE - 6;
 
     private EmptyCell mEmptyCell;
     private ErrorCell mErrorCell;
