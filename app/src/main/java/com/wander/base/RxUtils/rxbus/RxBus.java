@@ -3,6 +3,8 @@ package com.wander.base.RxUtils.rxbus;
 
 import android.support.annotation.NonNull;
 
+import com.wander.base.log.WLog;
+
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
@@ -11,10 +13,14 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.subjects.PublishSubject;
@@ -22,11 +28,12 @@ import io.reactivex.subjects.Subject;
 
 /**
  * @version 1.4
- * bus重新改为线程安全对象
- *
- * Created by Android on 2016/6/6.
+ *          bus重新改为线程安全对象
+ *          <p>
+ *          Created by Android on 2016/6/6.
  */
 public class RxBus {
+    private static final String TAG = "RxBus";
     private static RxBus instance;
 
     public static RxBus getInstance() {
@@ -39,6 +46,7 @@ public class RxBus {
         }
         return instance;
     }
+
     //TAG默认值
     public static final int TAG_DEFAULT = 0;
     public static final int TAG_ERROR = -1;
@@ -62,6 +70,7 @@ public class RxBus {
 
     /**
      * 发布事件
+     *
      * @param code
      * @param obj
      */
@@ -79,11 +88,12 @@ public class RxBus {
 
     /**
      * 订阅事件
+     *
      * @return
      */
     public <T> Observable tObservable(int code, final Class<T> eventType) {
         return bus.ofType(Msg.class)//判断接收事件类型
-                .filter(msg -> msg.code==code)
+                .filter(msg -> msg.code == code)
                 .map(new Function<Msg, Object>() {
                     @Override
                     public Object apply(Msg msg) throws Exception {
@@ -95,27 +105,36 @@ public class RxBus {
 
     /**
      * 订阅者注册
+     *
      * @param subscriber
      */
     public void register(@NonNull Object subscriber) {
-        Flowable.just(subscriber)
-                .filter(s -> s != null)//判断订阅者不为空
-                .filter(s -> subscriptions.get(subscriber)==null) //判断订阅者没有在序列中
+        Flowable
+                .create((FlowableOnSubscribe<Class>) e -> {
+                    int i = 0;
+                    for (Class obj = subscriber.getClass(); obj != null && i < 5; obj = obj.getSuperclass(), i++) {
+                        e.onNext(obj);
+                    }
+                }, BackpressureStrategy.BUFFER)
                 .map(s -> s.getClass())
                 .flatMap(s -> Flowable.fromArray(s.getDeclaredMethods()))//获取订阅者方法并且用Observable装载
-                .map(m -> {m.setAccessible(true);return m;})//使非public方法可以被invoke,并且关闭安全检查提升反射效率
+                .map(m -> {
+                    m.setAccessible(true);
+                    return m;
+                })//使非public方法可以被invoke,并且关闭安全检查提升反射效率
                 .filter(m -> m.isAnnotationPresent(Subscribe.class))//方法必须被Subscribe注解
                 .subscribe(m -> {
-                    addSubscription(m,subscriber);
+                    addSubscription(m, subscriber);
                 });
     }
 
     /**
      * 添加订阅
-     * @param m 方法
+     *
+     * @param m          方法
      * @param subscriber 订阅者
      */
-    private void addSubscription(Method m, Object subscriber){
+    private void addSubscription(Method m, Object subscriber) {
         //获取方法内参数
         Class[] parameterType = m.getParameterTypes();
         //只获取第一个方法参数，否则默认为Object
@@ -138,53 +157,44 @@ public class RxBus {
                             }
                         },
                         e -> System.out.println("this object is not invoke"));
-        putSubscriptionsData(subscriber,disposable);
+        putSubscriptionsData(subscriber, disposable);
     }
 
     /**
      * 添加订阅者到map空间来unRegister
+     *
      * @param subscriber 订阅者
      * @param disposable 订阅者 Subscription
      */
-    private void putSubscriptionsData(Object subscriber, Disposable disposable){
+    private void putSubscriptionsData(Object subscriber, Disposable disposable) {
+        if (subscriptions.get(subscriber) != null) {
+            return;
+        }
         CompositeDisposable subs = subscriptions.get(subscriber);
         if (subs == null) {
             subs = new CompositeDisposable();
         }
         subs.add(disposable);
         subscriptions.put(subscriber, subs);
+        WLog.d(TAG, "register:" + subscriber + "");
     }
 
     /**
      * 解除订阅者
+     *
      * @param subscriber 订阅者
      */
     public void unRegister(Object subscriber) {
         Flowable.just(subscriber)
-                .filter(s -> s!=null)
+                .filter(s -> s != null)
                 .map(s -> subscriptions.get(s))
-                .filter(subs -> subs!=null)
-                .subscribeWith(new Subscriber<CompositeDisposable>() {
-                    @Override
-                    public void onSubscribe(Subscription s) {
-
-                    }
-
-                    @Override
-                    public void onNext(CompositeDisposable compositeDisposable) {
-                        compositeDisposable.dispose();
-                        subscriptions.remove(subscriber);
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
+                .filter(subs -> subs != null)
+                .subscribe(compositeDisposable -> {
+                    compositeDisposable.dispose();
+                    subscriptions.remove(subscriber);
+                }, throwable -> {
+                    subscriptions.remove(subscriber);
+                    WLog.d(TAG, "unRegister:" + subscriber);
                 });
     }
 

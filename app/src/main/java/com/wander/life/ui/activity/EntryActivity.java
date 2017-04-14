@@ -55,7 +55,7 @@ public class EntryActivity extends Activity {
             goSwitch();
         }
     };
-    private java.lang.String LAST_IMAGE_URL = "LAST_IMAGE_URL";
+    private String LAST_IMAGE_URL = "LAST_IMAGE_URL";
 
     private void goSwitch() {
         Observable.timer(1500, TimeUnit.MILLISECONDS)
@@ -66,7 +66,7 @@ public class EntryActivity extends Activity {
                         Intent intent = new Intent(EntryActivity.this, MainActivity.class);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        inited = !inited;
+                        inited = true;
                         finish();
                     }
                 });
@@ -125,9 +125,9 @@ public class EntryActivity extends Activity {
 //            entry_bg.setImageBitmap(bitmap);
 //            goSwitch();
             ImageLoader.getInstance().displayImage(url, entry_bg, options, loadingListener);
-            PrefsUtils.savePrefString(this, LAST_IMAGE_URL, url);
+            PrefsUtils.savePrefString(LAST_IMAGE_URL, url);
         } else {
-            String imageUrl = PrefsUtils.loadPrefString(this, LAST_IMAGE_URL);
+            String imageUrl = PrefsUtils.loadPrefString(LAST_IMAGE_URL);
             if (TextUtils.isEmpty(imageUrl)) {
                 entry_bg.setImageResource(R.mipmap.entry_bg);
                 goSwitch();

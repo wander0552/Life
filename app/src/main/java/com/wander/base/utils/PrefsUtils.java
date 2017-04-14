@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.wander.life.App;
+
 /**
  * DefaultSharedPreferences
  */
@@ -13,13 +15,13 @@ public class PrefsUtils {
     private static SharedPreferences pref = null;
     private static SharedPreferences.Editor editor = null;
 
-    public static String loadPrefString(Context context, String key) {
-        return loadPrefString(context, key, null);
+    public static String loadPrefString( String key) {
+        return loadPrefString(key, null);
     }
 
-    public static String loadPrefString(Context context, String key, String defaultValue) {
+    public static String loadPrefString( String key, String defaultValue) {
         if (pref == null) {
-            pref = PreferenceManager.getDefaultSharedPreferences(context);
+            pref = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
         }
         String strRet = defaultValue;
         try {
@@ -71,9 +73,9 @@ public class PrefsUtils {
         return strRet;
     }
 
-    public static void savePrefString(Context context, String key, String value) {
+    public static void savePrefString( String key, String value) {
         if (pref == null) {
-            pref = PreferenceManager.getDefaultSharedPreferences(context);
+            pref = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
         }
         if (editor == null) {
             editor = pref.edit();
@@ -82,9 +84,9 @@ public class PrefsUtils {
         editor.apply();
     }
 
-    public static int loadPrefInt(Context context, String key, int defaultValue) {
+    public static int loadPrefInt( String key, int defaultValue) {
         if (pref == null) {
-            pref = PreferenceManager.getDefaultSharedPreferences(context);
+            pref = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
         }
 
         int iRet = defaultValue;
@@ -143,9 +145,9 @@ public class PrefsUtils {
         return iRet;
     }
 
-    public static void savePrefInt(Context context, String key, int value) {
+    public static void savePrefInt( String key, int value) {
         if (pref == null) {
-            pref = PreferenceManager.getDefaultSharedPreferences(context);
+            pref = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
         }
         if (editor == null) {
             editor = pref.edit();
@@ -154,9 +156,9 @@ public class PrefsUtils {
         editor.apply();
     }
 
-    public static long loadPrefLong(Context context, String key, long defaultValue) {
+    public static long loadPrefLong( String key, long defaultValue) {
         if (pref == null) {
-            pref = PreferenceManager.getDefaultSharedPreferences(context);
+            pref = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
         }
 
         long lRet = defaultValue;
@@ -215,9 +217,9 @@ public class PrefsUtils {
         return lRet;
     }
 
-    public static void savePrefLong(Context context, String key, long value) {
+    public static void savePrefLong( String key, long value) {
         if (pref == null) {
-            pref = PreferenceManager.getDefaultSharedPreferences(context);
+            pref = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
         }
         if (editor == null) {
             editor = pref.edit();
@@ -226,9 +228,9 @@ public class PrefsUtils {
         editor.apply();
     }
 
-    public static float loadPrefFloat(Context context, String key, float defaultValue) {
+    public static float loadPrefFloat( String key, float defaultValue) {
         if (pref == null) {
-            pref = PreferenceManager.getDefaultSharedPreferences(context);
+            pref = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
         }
 
         float fRet = defaultValue;
@@ -288,9 +290,9 @@ public class PrefsUtils {
         return fRet;
     }
 
-    public static void savePrefFloat(Context context, String key, float value) {
+    public static void savePrefFloat( String key, float value) {
         if (pref == null) {
-            pref = PreferenceManager.getDefaultSharedPreferences(context);
+            pref = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
         }
         if (editor == null) {
             editor = pref.edit();
@@ -299,9 +301,9 @@ public class PrefsUtils {
         editor.apply();
     }
 
-    public static boolean loadPrefBoolean(Context context, String key, boolean defaultValue) {
+    public static boolean loadPrefBoolean( String key, boolean defaultValue) {
         if (pref == null) {
-            pref = PreferenceManager.getDefaultSharedPreferences(context);
+            pref = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
         }
 
         boolean bRet = defaultValue;
@@ -356,9 +358,9 @@ public class PrefsUtils {
         return bRet;
     }
 
-    public static void savePrefBoolean(Context context, String key, boolean value) {
+    public static void savePrefBoolean(String key, boolean value) {
         if (pref == null) {
-            pref = PreferenceManager.getDefaultSharedPreferences(context);
+            pref = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
         }
         if (editor == null) {
             editor = pref.edit();

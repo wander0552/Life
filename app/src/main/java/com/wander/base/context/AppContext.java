@@ -189,7 +189,7 @@ public class AppContext {
     }
 
     public static String getAppUid() {
-        String uid = PrefsUtils.loadPrefString(App.getAppContext(), Constants.PREFERENCE_UID_INTERNAL, Constants.DEF_ERROR_UID);
+        String uid = PrefsUtils.loadPrefString(Constants.PREFERENCE_UID_INTERNAL, Constants.DEF_ERROR_UID);
         if (TextUtils.isEmpty(uid) || Constants.DEF_ERROR_UID.equals(uid)) {//get uid from network
             loadAppUid();
             return Constants.DEF_ERROR_UID;
@@ -198,7 +198,7 @@ public class AppContext {
     }
 
     private static void loadAppUid() {
-        long lastTime = PrefsUtils.loadPrefLong(App.getAppContext(),
+        long lastTime = PrefsUtils.loadPrefLong(
                 Constants.PREFERENCE_UID_LAST_INTERNAL, 0L);
         if (Math.abs(System.currentTimeMillis() - lastTime) < WDate.T_MS_DAY) {
             //每天只取一次
@@ -218,9 +218,9 @@ public class AppContext {
                                 return;
                             }
                             //保存相关数据
-                            PrefsUtils.savePrefString(App.getAppContext(),
+                            PrefsUtils.savePrefString(
                                     Constants.PREFERENCE_UID_INTERNAL, mUid);
-                            PrefsUtils.savePrefLong(App.getAppContext(),
+                            PrefsUtils.savePrefLong(
                                     Constants.PREFERENCE_UID_LAST_INTERNAL, System.currentTimeMillis());
                         }
                     }
