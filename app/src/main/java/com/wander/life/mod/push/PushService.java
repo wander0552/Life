@@ -12,12 +12,14 @@ import java.util.TimerTask;
 
 public class PushService extends Service {
     String Tag = "PushService";
+    private Timer timer;
+
     public PushService() {
     }
 
     @Override
     public void onCreate() {
-        WLog.e(Tag,"-----------service create--------");
+        WLog.e(Tag, "-----------service create--------");
 
     }
 
@@ -30,14 +32,15 @@ public class PushService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                WLog.e(Tag,"running push");
-            }
-        }, 1000,600000);
-
+        if (timer == null) {
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    WLog.e(Tag, "running push");
+                }
+            }, 1000, 600000);
+        }
         return Service.START_STICKY;
     }
 

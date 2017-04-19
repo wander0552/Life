@@ -19,7 +19,7 @@ import com.wander.life.widget.recycler.RVSimpleAdapter;
 
 public class BidLineCell extends RVBaseCell<Integer> {
     private Context context;
-    private int color = Color.BLACK;
+    private int color = R.color.secondary_text;
     private int height = 1;
 
     public BidLineCell(Context context) {
@@ -49,9 +49,14 @@ public class BidLineCell extends RVBaseCell<Integer> {
     public void onBindViewHolder(RVBaseViewHolder holder, int position) {
         View view = holder.getView(R.id.cell_line);
         view.setPadding(0, 0, 0, DensityUtils.dp2px(context, height));
-        view.setBackgroundColor(color);
+        view.setBackgroundColor(context.getResources().getColor(color));
     }
 
-//    public static BidLineCell createBig(Context mContext) {
-//    }
+    public static BidLineCell createBig(Context mContext) {
+        return new BidLineCell(mContext, R.color.secondary_text, 10);
+    }
+
+    public static BidLineCell createMargin(Context mContext) {
+        return new BidLineCell(mContext, Color.TRANSPARENT, 10);
+    }
 }

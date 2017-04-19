@@ -1,14 +1,11 @@
 package com.wander.life.widget.recycler;
 
-import android.view.ViewGroup;
-
 /**
  * Created by zhouwei on 17/1/19.
  */
 
 public  abstract class RVBaseCell<T> implements Cell {
     protected String TAG = "RVBaseCell";
-
 
     public RVBaseCell() {
     }

@@ -43,7 +43,7 @@ public class PushManage implements IModBase {
         try {
             Intent intent = new Intent(packageContext, PushService.class);
 //            intent.putExtra(PushDefine.PUSH_CTOS_STOPSERVCE, true);
-            packageContext.startService(intent);
+            packageContext.stopService(intent);
             WLog.i(TAG, "stopPushService");
         } catch (Exception e) {
             e.printStackTrace();

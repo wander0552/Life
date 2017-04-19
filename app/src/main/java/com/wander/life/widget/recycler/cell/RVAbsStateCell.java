@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-
 import com.wander.life.R;
 import com.wander.life.widget.recycler.RVBaseCell;
 import com.wander.life.widget.recycler.RVBaseViewHolder;
@@ -16,10 +15,10 @@ import com.wander.life.widget.recycler.RVBaseViewHolder;
  * Created by zhouwei on 17/2/15.
  */
 
-public abstract class RVAbsStateCell extends RVBaseCell<Object> {
+public abstract class RVAbsStateCell<T> extends RVBaseCell<T> {
     protected View mView;
     protected int mHeight = 0;
-    public RVAbsStateCell(Object o) {
+    public RVAbsStateCell(T o) {
         super(o);
     }
 
@@ -47,13 +46,13 @@ public abstract class RVAbsStateCell extends RVBaseCell<Object> {
         }
         if(mView!=null){
             LinearLayout container = (LinearLayout) view.findViewById(R.id.rv_cell_state_root_layout);
+            container.removeAllViews();
             if (null != mView.getParent()) {
                 ((ViewGroup) mView.getParent()).removeView(mView);
             }
-            container.removeAllViews();
             container.addView(mView);
         }
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         if(mHeight > 0){
             params.height = mHeight;
         }

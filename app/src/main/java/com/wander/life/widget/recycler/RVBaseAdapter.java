@@ -1,18 +1,13 @@
 package com.wander.life.widget.recycler;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ViewGroup;
+
 
 import com.wander.base.log.WLog;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
-/**
- * Created by zhouwei on 17/1/19.
- */
 
 public abstract class RVBaseAdapter<C extends RVBaseCell> extends RecyclerView.Adapter<RVBaseViewHolder> {
     public static final String TAG = "RVBaseAdapter";
@@ -51,7 +46,7 @@ public abstract class RVBaseAdapter<C extends RVBaseCell> extends RecyclerView.A
     @Override
     public void onViewDetachedFromWindow(RVBaseViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        WLog.e(TAG, "onViewDetachedFromWindow invoke...");
+//        LDLog.e(TAG, "onViewDetachedFromWindow invoke...");
         //释放资源
         int position = holder.getAdapterPosition();
         //越界检查
@@ -93,10 +88,13 @@ public abstract class RVBaseAdapter<C extends RVBaseCell> extends RecyclerView.A
      *
      * @param cell
      */
-    public void remove(C cell) {
+    public int remove(C cell) {
+        if (cell == null) {
+            return -1;
+        }
         int indexOfCell = mData.indexOf(cell);
-
         remove(indexOfCell);
+        return indexOfCell;
     }
 
     public void remove(int index) {
@@ -118,6 +116,40 @@ public abstract class RVBaseAdapter<C extends RVBaseCell> extends RecyclerView.A
 
         mData.subList(start, start + count).clear();
 
+        notifyItemRangeRemoved(start, count);
+    }
+
+    /**
+     * 移除start以后的元素
+     *
+     * @param start
+     */
+    public void removeToEnd(int start) {
+        int size = mData.size();
+        if (mData == null || start < 0 || start > size) {
+            return;
+        }
+        int count = size - start;
+        WLog.e(TAG, "start:" + start + "\tcount:" + count);
+        mData.subList(start, size).clear();
+        notifyItemRangeRemoved(start, count);
+    }
+
+    /**
+     * 移除当前cell以后的元素
+     *
+     * @param cell
+     */
+    public void removeToEnd(C cell) {
+        int start = getCellIndex(cell) + 1;
+        WLog.e(TAG, start + "");
+        int size = mData.size();
+        if (mData == null || start < 0 || start > size) {
+            return;
+        }
+        int count = size - start;
+        WLog.e(TAG, "start:" + start + "\tcount:" + count);
+        mData.subList(start, size).clear();
         notifyItemRangeRemoved(start, count);
     }
 
@@ -149,16 +181,6 @@ public abstract class RVBaseAdapter<C extends RVBaseCell> extends RecyclerView.A
         notifyDataSetChanged();
     }
 
-    /**
-     * 更新制定的cell
-     * @param cell
-     */
-    public void notifyOneCell(Cell cell) {
-        int indexOf = mData.indexOf(cell);
-        if (indexOf >=0 && indexOf <mData.size()){
-            notifyItemChanged(indexOf);
-        }
-    }
 
     /**
      * 如果子类需要在onBindViewHolder 回调的时候做的操作可以在这个方法里做
@@ -168,4 +190,37 @@ public abstract class RVBaseAdapter<C extends RVBaseCell> extends RecyclerView.A
      */
     protected abstract void onViewHolderBound(RVBaseViewHolder holder, int position);
 
+    /**
+     * 更新制定的cell
+     *
+     * @param cell
+     */
+    public void notifyOneCell(C cell) {
+        int indexOf = mData.indexOf(cell);
+        if (indexOf >= 0 && indexOf < mData.size()) {
+            notifyItemChanged(indexOf);
+        }
+    }
+
+    /**
+     * 不存在加入  存在则刷新
+     *
+     * @param i
+     * @param cell
+     */
+    public void addOrNotify(int i, C cell) {
+        int indexOf = mData.indexOf(cell);
+        if (indexOf >= 0 && indexOf < mData.size()) {
+            notifyItemChanged(indexOf);
+        } else {
+            add(i, cell);
+        }
+    }
+
+    public int getCellIndex(C cell) {
+        if (cell != null) {
+            return mData.indexOf(cell);
+        }
+        return -1;
+    }
 }

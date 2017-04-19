@@ -15,7 +15,7 @@ import com.wander.life.widget.recycler.RVSimpleAdapter;
  */
 
 public class LoadMoreCell extends RVAbsStateCell{
-    public static final int mDefaultHeight = 80;//dp
+    public static final int mDefaultHeight = 40;//dp
     public LoadMoreCell(Object o) {
         super(o);
     }

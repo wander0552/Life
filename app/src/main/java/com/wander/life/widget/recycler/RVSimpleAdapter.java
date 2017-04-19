@@ -7,10 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wander.base.utils.DensityUtils;
-import com.wander.life.widget.recycler.cell.EmptyCell;
-import com.wander.life.widget.recycler.cell.ErrorCell;
-import com.wander.life.widget.recycler.cell.LoadMoreCell;
-import com.wander.life.widget.recycler.cell.LoadingCell;
+import com.wander.life.widget.recycler.cell.*;
 
 
 /**
@@ -24,6 +21,7 @@ public class RVSimpleAdapter extends RVBaseAdapter {
     public static final int LOAD_MORE_TYPE = Integer.MAX_VALUE - 4;
     public static final int TEXT_TYPE = Integer.MAX_VALUE - 5;
     public static final int LINE_TYPE = Integer.MAX_VALUE - 6;
+    public static int BID_ONE = Integer.MAX_VALUE - 7;
 
     private EmptyCell mEmptyCell;
     private ErrorCell mErrorCell;
@@ -242,11 +240,15 @@ public class RVSimpleAdapter extends RVBaseAdapter {
         add(mErrorCell);
     }
 
+    public void showError(String error) {
+        mErrorCell.setData(error);
+        showError();
+    }
+
     /**
      * 指定列表发生错误时显示的View，默认为全屏高度
      *
      * @param errorView
-     * @see {@link #showError(View, int)}
      */
     public void showError(View errorView) {
         showError(errorView, 0);
@@ -315,7 +317,9 @@ public class RVSimpleAdapter extends RVBaseAdapter {
         }
         checkNotContainSpecailCell();
         //设置默认高度
-        if (height == 0) {
+        if (height < 0) {
+
+        } else if (height == 0) {
             int defaultHeight = DensityUtils.dp2px(loadMoreView.getContext(), LoadMoreCell.mDefaultHeight);
             mLoadMoreCell.setHeight(defaultHeight);
         } else {
@@ -474,4 +478,10 @@ public class RVSimpleAdapter extends RVBaseAdapter {
     public boolean isShowError() {
         return mIsShowError;
     }
+
+    public LoadMoreCell getLoadMoreCell() {
+        return mLoadMoreCell;
+    }
+
+
 }

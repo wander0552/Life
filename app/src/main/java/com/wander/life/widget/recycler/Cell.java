@@ -1,6 +1,5 @@
 package com.wander.life.widget.recycler;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 /**
