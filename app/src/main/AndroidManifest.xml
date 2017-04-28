@@ -89,6 +89,7 @@
         <service
             android:name=".mod.push.PushService"
             android:enabled="true"
+            android:process=":wordPush"
             android:exported="true">
             <intent-filter android:priority="80000">
                 <action android:name="com.wander.mod.push.PushService" />

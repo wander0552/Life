@@ -3,20 +3,14 @@ package com.wander.base.RxUtils.rxbus;
 
 import android.support.annotation.NonNull;
 
-import com.wander.base.log.WLog;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
+import com.wander.base.log.WLog;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -27,10 +21,8 @@ import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
 /**
- * @version 1.4
- *          bus重新改为线程安全对象
- *          <p>
- *          Created by Android on 2016/6/6.
+ * Created by wander on 2017/4/26.
+ * 已解决leaks问题
  */
 public class RxBus {
     private static final String TAG = "RxBus";
@@ -64,9 +56,9 @@ public class RxBus {
         bus = PublishSubject.create().toSerialized();
     }
 
-    public void post(@NonNull Object obj) {
-        post(TAG_DEFAULT, obj);
-    }
+//    public void post(@NonNull Object obj) {
+//        post(TAG_DEFAULT, obj);
+//    }
 
     /**
      * 发布事件
@@ -76,6 +68,16 @@ public class RxBus {
      */
     public void post(@NonNull int code, @NonNull Object obj) {
         bus.onNext(new Msg(code, obj));
+    }
+
+    /**
+     * 发布事件
+     * 只处理code
+     *
+     * @param code
+     */
+    public void post(@NonNull int code) {
+        bus.onNext(new Msg(code, new MessageEvent(code, "")));
     }
 
 //    public Observable<Object> tObservable() {
@@ -91,9 +93,14 @@ public class RxBus {
      *
      * @return
      */
-    public <T> Observable tObservable(int code, final Class<T> eventType) {
+    public <T> Observable tObservable(final int code, final Class<T> eventType) {
         return bus.ofType(Msg.class)//判断接收事件类型
-                .filter(msg -> msg.code == code)
+                .filter(new Predicate<Msg>() {
+                    @Override
+                    public boolean test(@io.reactivex.annotations.NonNull Msg msg) throws Exception {
+                        return msg.code == code;
+                    }
+                })
                 .map(new Function<Msg, Object>() {
                     @Override
                     public Object apply(Msg msg) throws Exception {
@@ -105,27 +112,24 @@ public class RxBus {
 
     /**
      * 订阅者注册
+     * 寻找父类的方法并且限制五层
      *
      * @param subscriber
      */
-    public void register(@NonNull Object subscriber) {
-        Flowable
-                .create((FlowableOnSubscribe<Class>) e -> {
-                    int i = 0;
-                    for (Class obj = subscriber.getClass(); obj != null && i < 5; obj = obj.getSuperclass(), i++) {
-                        e.onNext(obj);
-                    }
-                }, BackpressureStrategy.BUFFER)
-                .map(s -> s.getClass())
-                .flatMap(s -> Flowable.fromArray(s.getDeclaredMethods()))//获取订阅者方法并且用Observable装载
-                .map(m -> {
-                    m.setAccessible(true);
-                    return m;
-                })//使非public方法可以被invoke,并且关闭安全检查提升反射效率
-                .filter(m -> m.isAnnotationPresent(Subscribe.class))//方法必须被Subscribe注解
-                .subscribe(m -> {
-                    addSubscription(m, subscriber);
-                });
+    public synchronized void register(@NonNull final Object subscriber) {
+        //获取订阅者方法并且用Observable装载
+        //使非public方法可以被invoke,并且关闭安全检查提升反射效率
+        //方法必须被Subscribe注解
+        int i = 0;
+        for (Class obj = subscriber.getClass(); obj != null && i < 5; obj = obj.getSuperclass(), i++) {
+            for (Method method : obj.getDeclaredMethods()) {
+                method.setAccessible(true);
+                if (method.isAnnotationPresent(Subscribe.class)) {
+                    addSubscription(method, subscriber);
+                }
+            }
+        }
+
     }
 
     /**
@@ -134,7 +138,7 @@ public class RxBus {
      * @param m          方法
      * @param subscriber 订阅者
      */
-    private void addSubscription(Method m, Object subscriber) {
+    private void addSubscription(final Method m, final Object subscriber) {
         //获取方法内参数
         Class[] parameterType = m.getParameterTypes();
         //只获取第一个方法参数，否则默认为Object
@@ -147,16 +151,26 @@ public class RxBus {
         //订阅事件
         Disposable disposable = tObservable(sub.tag(), cla)
                 .observeOn(EventThread.getScheduler(sub.thread()))
-                .subscribe(o -> {
-                            try {
-                                m.invoke(subscriber, o);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            } catch (InvocationTargetException e) {
-                                e.printStackTrace();
+                .subscribe(new Consumer() {
+                               @Override
+                               public void accept(@io.reactivex.annotations.NonNull Object o) throws Exception {
+                                   try {
+                                       m.invoke(subscriber, o);
+                                   } catch (IllegalAccessException e) {
+                                       e.printStackTrace();
+                                       unRegister(subscriber);
+                                   } catch (InvocationTargetException e) {
+                                       e.printStackTrace();
+                                       unRegister(subscriber);
+                                   }
+                               }
+                           },
+                        new Consumer() {
+                            @Override
+                            public void accept(@io.reactivex.annotations.NonNull Object e) throws Exception {
+                                System.out.println("this object is not invoke");
                             }
-                        },
-                        e -> System.out.println("this object is not invoke"));
+                        });
         putSubscriptionsData(subscriber, disposable);
     }
 
@@ -167,16 +181,17 @@ public class RxBus {
      * @param disposable 订阅者 Subscription
      */
     private void putSubscriptionsData(Object subscriber, Disposable disposable) {
-        if (subscriptions.get(subscriber) != null) {
-            return;
-        }
+        addDisposable(subscriptions, subscriber, disposable);
+        WLog.d(TAG, "register:" + subscriber + "");
+    }
+
+    private void addDisposable(Map<Object, CompositeDisposable> subscriptions, Object subscriber, Disposable disposable) {
         CompositeDisposable subs = subscriptions.get(subscriber);
         if (subs == null) {
             subs = new CompositeDisposable();
+            subscriptions.put(subscriber, subs);
         }
         subs.add(disposable);
-        subscriptions.put(subscriber, subs);
-        WLog.d(TAG, "register:" + subscriber + "");
     }
 
     /**
@@ -184,18 +199,18 @@ public class RxBus {
      *
      * @param subscriber 订阅者
      */
-    public void unRegister(Object subscriber) {
-        Flowable.just(subscriber)
-                .filter(s -> s != null)
-                .map(s -> subscriptions.get(s))
-                .filter(subs -> subs != null)
-                .subscribe(compositeDisposable -> {
-                    compositeDisposable.dispose();
-                    subscriptions.remove(subscriber);
-                }, throwable -> {
-                    subscriptions.remove(subscriber);
-                    WLog.d(TAG, "unRegister:" + subscriber);
-                });
+    public void unRegister(final Object subscriber) {
+        if (subscriber == null) {
+            throw new NullPointerException("Object to unregister must not be null.");
+        }
+        CompositeDisposable compositeDisposable = subscriptions.get(subscriber);
+        if (compositeDisposable != null) {
+            if (!compositeDisposable.isDisposed()) {
+                compositeDisposable.dispose();
+            }
+            subscriptions.remove(subscriber);
+            WLog.d(TAG, "unRegister:" + subscriber + "");
+        }
     }
 
 }
