@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.MainThread;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.wander.base.dir.DirsUtils;
 import com.wander.base.log.WLog;
@@ -21,16 +20,11 @@ import com.wander.life.utils.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Notification;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
-import io.reactivex.ObservableTransformer;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.nostra13.universalimageloader.core.ImageLoader.TAG;
@@ -55,7 +49,7 @@ public class EditorManage implements IModBase {
 
 
     @MainThread
-    public void screenShot(List<EditBaseCell> data, RecyclerView mRecyclerView) {
+    public void screenShot(List<EditBaseCell> data, final RecyclerView mRecyclerView) {
         if (data == null || data.isEmpty() || mRecyclerView == null) {
             return;
         }
@@ -74,7 +68,7 @@ public class EditorManage implements IModBase {
         }
 
         //绘制截图的背景
-        Bitmap bigBitmap = Bitmap.createBitmap(mRecyclerView.getMeasuredWidth(), shotHeight, Bitmap.Config.RGB_565);
+        final Bitmap bigBitmap = Bitmap.createBitmap(mRecyclerView.getMeasuredWidth(), shotHeight, Bitmap.Config.RGB_565);
         Canvas bigCanvas = new Canvas(bigBitmap);
         Drawable lBackground = mRecyclerView.getBackground();
         if (lBackground instanceof ColorDrawable) {

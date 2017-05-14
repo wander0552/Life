@@ -1,12 +1,11 @@
 package com.wander.life.ui.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.wander.base.RxUtils.rxbus.EventThread;
-import com.wander.base.RxUtils.rxbus.RxBus;
 import com.wander.base.RxUtils.rxbus.Subscribe;
 import com.wander.life.R;
 
@@ -21,7 +20,6 @@ public class ChooseActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        RxBus.getInstance().register(this);
     }
 
     @Override
@@ -32,7 +30,6 @@ public class ChooseActivity extends AppCompatActivity {
         choose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RxBus.getInstance().post(100, "go change text");
 
             }
         });
@@ -48,7 +45,6 @@ public class ChooseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        RxBus.getInstance().unRegister(this);
     }
 
 

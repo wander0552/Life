@@ -2,7 +2,6 @@ package com.wander.life.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -43,7 +42,7 @@ public class MailBoxAdapter extends RecyclerView.Adapter<MailBoxAdapter.MailView
 
     @Override
     public void onBindViewHolder(MailViewHolder holder, int position) {
-        Letter letter = mList.get(position);
+        final Letter letter = mList.get(position);
         holder.tv_createTime.setText(DateFormat.format("yyyy-MM-dd", letter.getCreateTime()));
         String content = letter.getContent();
         if (!TextUtils.isEmpty(content)) {

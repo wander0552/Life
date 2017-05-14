@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.wander.life.ui.activity.EditorActivity;
-import com.wander.life.ui.activity.WriteActivity;
 
 /**
  * Created by wander on 2017/2/23.

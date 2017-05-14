@@ -19,7 +19,7 @@ final class OperatorMapResponseToBodyOrError<T> implements ObservableOperator<T,
     }
 
     @Override
-    public Observer<? super Response<T>> apply(Observer<? super T> observer) throws Exception {
+    public Observer<? super Response<T>> apply(final Observer<? super T> observer) throws Exception {
         return new Observer<Response<T>>() {
             @Override
             public void onSubscribe(Disposable d) {

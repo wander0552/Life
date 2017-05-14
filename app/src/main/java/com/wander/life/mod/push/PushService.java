@@ -2,7 +2,6 @@ package com.wander.life.mod.push;
 
 import android.app.Service;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.IBinder;
 
 import com.wander.base.log.WLog;

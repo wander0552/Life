@@ -2,10 +2,7 @@ package com.wander.life.ui.adapter.cell;
 
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.wander.base.log.WLog;
 import com.wander.life.bean.LetterItem;
 import com.wander.life.widget.recycler.RVBaseCell;
 import com.wander.life.widget.recycler.RVBaseViewHolder;

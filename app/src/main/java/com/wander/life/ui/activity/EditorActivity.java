@@ -3,56 +3,24 @@ package com.wander.life.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.LruCache;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.wander.base.dir.DirsUtils;
 import com.wander.base.log.WLog;
-import com.wander.base.utils.BitmapTools;
-import com.wander.base.utils.ImageUtil;
-import com.wander.base.utils.ShotUtils;
 import com.wander.life.R;
 import com.wander.life.bean.LetterItem;
 import com.wander.life.mod.editor.EditorManage;
 import com.wander.life.presenter.EditPresenter;
 import com.wander.life.ui.adapter.EditAdapter;
-import com.wander.life.ui.adapter.cell.EditBaseCell;
 import com.wander.life.ui.adapter.cell.EditCell;
 import com.wander.life.ui.adapter.cell.ImageCell;
 import com.wander.life.ui.iviews.IEditView;
 import com.wander.life.ui.widget.EditRecyclerView;
-import com.wander.life.utils.ToastUtils;
-import com.wander.life.widget.recycler.Cell;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.ToIntFunction;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.BooleanSupplier;
-import io.reactivex.functions.Consumer;
-import io.reactivex.internal.operators.flowable.FlowableFromArray;
-import io.reactivex.schedulers.Schedulers;
+import com.wander.life.widget.recycler.cell.TextCell;
 
 public class EditorActivity extends PresenterActivity<EditPresenter> implements IEditView {
     //调用系统相册-选择图片
@@ -61,6 +29,7 @@ public class EditorActivity extends PresenterActivity<EditPresenter> implements 
     private EditRecyclerView mRecyclerView;
     private EditAdapter mAdapter;
     private ImageView edit_bar_back, edit_bar_share, edit_bar_theme;
+    private LinearLayoutManager mLinearManager;
 
     @Override
     protected int getLayoutId() {
@@ -99,10 +68,32 @@ public class EditorActivity extends PresenterActivity<EditPresenter> implements 
 
     private void initRecycler() {
         mRecyclerView = (EditRecyclerView) findViewById(R.id.editor_recycle);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mLinearManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearManager);
         mAdapter = new EditAdapter();
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.add(new TextCell("<html>  \n" +
+                "<h2>数字显示</h2>  \n" +
+                "<ul>" +
+                "<li>第一天</li>" +
+                "<li>第二天</li>" +
+                "<li>第三天</li>" +
+                "<li>第四天</li>" +
+                "</ul>  \n" +
+                "  \n" +"<font\n" +
+                " color=\"#ff0000\">红色</font>"+
+                "<h2>数字显示,自己确定开始数字</h2>  \n" +
+                "<ol start=\"5\">  \n" +
+                "<li>第一天</li>  \n" +
+                "<li>第二天</li>  \n" +
+                "<li>第三天</li>  \n" +
+                "<li>第四天</li>  \n" +
+                "</ol>  \n" +
+                "<html>  "));
         mAdapter.add(new EditCell(mPresenter.createEditItem()));
+        mAdapter.add(new ImageCell(new LetterItem()));
+        mLinearManager.scrollToPosition(0);
+
     }
 
 

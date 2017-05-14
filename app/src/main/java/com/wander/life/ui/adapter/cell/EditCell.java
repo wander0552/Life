@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.wander.base.log.WLog;
 import com.wander.life.R;
@@ -60,7 +59,7 @@ public class EditCell extends EditBaseCell {
     public void onBindViewHolder(RVBaseViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         if (holder instanceof EditViewHolder) {
-        EditViewHolder mHolder = (EditViewHolder) holder;
+        final EditViewHolder mHolder = (EditViewHolder) holder;
             String detail = mData.getDetail();
             if (TextUtils.isEmpty(detail)){
                 mHolder.mEditText.setHint("请输入内容");

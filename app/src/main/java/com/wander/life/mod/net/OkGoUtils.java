@@ -4,9 +4,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
-import com.wander.base.utils.PrefsUtils;
 import com.wander.base.utils.TimeUtils;
-import com.wander.life.App;
 import com.wander.life.BuildConfig;
 
 import java.util.logging.Level;

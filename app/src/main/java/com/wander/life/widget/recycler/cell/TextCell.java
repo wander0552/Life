@@ -1,6 +1,7 @@
 package com.wander.life.widget.recycler.cell;
 
 import android.graphics.Color;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,15 @@ import com.wander.life.widget.recycler.RVSimpleAdapter;
 public class TextCell extends RVBaseCell<String> {
     private int color = Color.BLACK;
     private int size = 15;
+
+    public TextCell(String s) {
+        super(s);
+    }
+
+    public TextCell(String s, int color) {
+        super(s);
+        this.color = color;
+    }
 
     public TextCell(String s, int color, int size) {
         super(s);
@@ -40,7 +50,7 @@ public class TextCell extends RVBaseCell<String> {
     @Override
     public void onBindViewHolder(RVBaseViewHolder holder, int position) {
         TextView textView = holder.getTextView(R.id.cell_empty);
-        textView.setText( mData == null ? "暂无记录" : mData);
+        textView.setText( mData == null ? "暂无记录" : Html.fromHtml(mData));
         textView.setTextSize(size);
         textView.setTextColor(color);
     }

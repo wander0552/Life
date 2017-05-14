@@ -2,7 +2,6 @@ package com.wander.base.utils;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

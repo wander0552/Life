@@ -42,18 +42,23 @@ public class WorldCardAdapter extends RecyclerView.Adapter<WorldCardAdapter.Worl
     }
 
     @Override
-    public void onBindViewHolder(WorldCardViewHolder holder, int position) {
-        WorldInfo worldInfo = mList.get(position);
+    public void onBindViewHolder(final WorldCardViewHolder holder, int position) {
+        final WorldInfo worldInfo = mList.get(position);
         ImageLoader.getInstance().displayImage(worldInfo.getPic1(), holder.item_pic, ImageLoaderUtils.getDefaultImage());
 
         holder.item_title.setText(worldInfo.getTitle());
         holder.item_des.setText(worldInfo.getDes());
-        holder.itemView.setOnClickListener(v -> {
-            Toast.makeText(context, "id" + worldInfo.getwId(), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(context, WorldDetailActivity.class);
-            intent.putExtra("url", worldInfo.getPic1());
-            Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, holder.item_pic, context.getString(R.string.item_world_image)).toBundle();
-            ActivityCompat.startActivity(context, intent, bundle);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(context, "id" + worldInfo.getwId(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, WorldDetailActivity.class);
+                intent.putExtra("url", worldInfo.getPic1());
+                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, holder.item_pic, context.getString(R.string.item_world_image)).toBundle();
+                ActivityCompat.startActivity(context, intent, bundle);
+
+            }
         });
 
     }

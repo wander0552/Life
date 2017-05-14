@@ -102,12 +102,23 @@ public static final int *;
 -dontwarn android.net.**
 -keep class android.net.** { *;}
 -keep class com.umeng.** { *;}
+-dontwarn com.umeng.**
 -keep class okio.** { *;}
 -dontwarn okio.**
 -keep class okhttp3.** { *;}
 -dontwarn okhttp3.**
--keep class pl.droidsonroids.gif** { *;}
--dontwarn pl.droidsonroids.gif**
+-keep class pl.droidsonroids.gif.** { *;}
+-dontwarn pl.droidsonroids.gif.**
+-keep class com.amap.api.** { *;}
+-dontwarn com.amap.api.**
+-keep class io.reactivex.** { *;}
+-dontwarn io.reactivex.**
+-keep class uk.co.senab.** { *;}
+-dontwarn uk.co.senab.**
+-keep class com.autonavi.** { *;}
+-dontwarn com.autonavi.**
+-dontwarn com.google.gson.**
+
 
 -dontwarn com.taobao.**
 -dontwarn anet.channel.**

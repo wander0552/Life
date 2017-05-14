@@ -21,6 +21,7 @@ def readProperties = { String key ->
 ext {
     compileSdkVersion = Integer.parseInt(readProperties("COMPILE_SDK_VERSION"))
     buildToolsVersion = readProperties("BUILD_TOOLS_VERSION")
+    supportV4 =  "com.android.support:support-v4:25.3.1"
 }
 
 allprojects {

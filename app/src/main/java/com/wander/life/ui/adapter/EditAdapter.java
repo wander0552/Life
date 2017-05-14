@@ -1,7 +1,5 @@
 package com.wander.life.ui.adapter;
 
-import android.support.v7.widget.RecyclerView;
-
 import com.wander.life.widget.recycler.RVBaseAdapter;
 import com.wander.life.widget.recycler.RVBaseViewHolder;
 

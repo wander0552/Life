@@ -2,7 +2,6 @@ package com.wander.base.context;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
-import android.bluetooth.le.AdvertiseSettings;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -10,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.provider.CalendarContract;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.Display;
@@ -21,8 +19,8 @@ import com.wander.base.net.HttpClient;
 import com.wander.base.utils.PrefsUtils;
 import com.wander.base.utils.WDate;
 import com.wander.life.App;
-import com.wander.life.utils.Constants;
 import com.wander.life.mod.net.UrlUtils;
+import com.wander.life.utils.Constants;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

@@ -12,7 +12,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 25
         // Enabling multidex support.
-        multiDexEnabled true
+//        multiDexEnabled true
 
         renderscriptTargetApi 24
         renderscriptSupportModeEnabled true
@@ -29,12 +29,12 @@ android {
 //        }
 
 
-        jackOptions {
-            enabled true
-        }
+//        jackOptions {
+//            enabled true
+//        }
 //
         ndk {
-            abiFilters 'arm64-v8a', 'armeabi-v7a'
+            abiFilters 'arm64-v8a', 'armeabi-v7a','x86_64'
         }
     }
 
@@ -114,12 +114,13 @@ android {
         }
     }
 
-    dexOptions {
-        javaMaxHeapSize "4g"
-    }
+//    dexOptions {
+//        javaMaxHeapSize "4g"
+//    }
 
     lintOptions {
-        abortOnError false
+        abortOnError true
+        ignoreWarnings true
     }
 
     //jpg文件改为png后缀名的情况
@@ -127,8 +128,8 @@ android {
 //        cruncherEnabled = false
 //    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 
 //    splits {
@@ -158,20 +159,19 @@ android {
 //    }
 
 }
-def supportVersion = "25.2.0"
+def supportVersion = "25.3.1"
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile project(':FlycoTabLayout_Lib')
-    //noinspection GradleCompatible
+        //noinspection GradleCompatible
     compile "com.android.support:appcompat-v7:${supportVersion}"
     compile "com.android.support:support-v4:${supportVersion}"
     compile "com.android.support:cardview-v7:${supportVersion}"
     compile "com.android.support:design:${supportVersion}"
     compile "com.android.support:recyclerview-v7:${supportVersion}"
-
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.squareup.okhttp3:okhttp:3.7.0'
     compile 'com.lzy.net:okgo:+'
@@ -182,5 +182,10 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.4'
     testCompile 'junit:junit:4.12'
-    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
+    compile 'com.github.chrisbanes.photoview:library:1.2.4'
+    //3D地图so及jar
+//    compile 'com.amap.api:3dmap:latest.integration'
+    compile 'com.amap.api:map2d:latest.integration'
+    //定位功能
+    compile 'com.amap.api:location:latest.integration'
 }

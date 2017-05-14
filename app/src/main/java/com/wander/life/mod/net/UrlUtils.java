@@ -4,7 +4,6 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.wander.base.context.AppContext;
-import com.wander.base.utils.crypt.Base64Coder;
 
 
 public class UrlUtils {

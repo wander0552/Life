@@ -1,15 +1,9 @@
 package com.wander.life.ui.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -20,7 +14,6 @@ import com.wander.life.ui.adapter.MailBoxAdapter;
 import com.wander.life.ui.iviews.IMailBoxView;
 import com.wander.life.utils.JumpUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

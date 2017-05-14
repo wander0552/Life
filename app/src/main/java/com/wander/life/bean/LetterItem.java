@@ -1,7 +1,5 @@
 package com.wander.life.bean;
 
-import android.graphics.Bitmap;
-
 /**
  * Created by wander on 2017/2/23.
  */

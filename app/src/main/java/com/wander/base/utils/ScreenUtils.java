@@ -1,7 +1,6 @@
 package com.wander.base.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.view.WindowManager;

@@ -9,7 +9,6 @@ import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.DefaultTabEntity;
 import com.wander.base.RxUtils.rxbus.EventThread;
-import com.wander.base.RxUtils.rxbus.RxBus;
 import com.wander.base.RxUtils.rxbus.Subscribe;
 import com.wander.base.log.WLog;
 import com.wander.life.R;
@@ -32,7 +31,6 @@ public class MainActivity extends PresenterActivity<MainPresenter> implements IM
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        RxBus.getInstance().register(this);
         WLog.e(TAG, "onCreate");
 
         initView();
@@ -100,7 +98,6 @@ public class MainActivity extends PresenterActivity<MainPresenter> implements IM
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        RxBus.getInstance().unRegister(this);
         WLog.e(TAG, "onDestroy");
     }
 
